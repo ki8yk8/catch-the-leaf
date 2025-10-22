@@ -36,6 +36,15 @@ k.onUpdate(() => {
 	basket.pos.x = k.clamp(p_x, basket.width / 2, b_x - basket.width / 2);
 });
 
+function leaf_component() {
+	const start = Date.now();
+
+	return {
+		id: "leaf",
+		start_time: start,
+	};
+}
+
 // randomly spawn leaf at the top
 function spawn_leaf(size = [25, 25]) {
 	const leaf = k.add([
@@ -43,10 +52,10 @@ function spawn_leaf(size = [25, 25]) {
 		k.pos(k.rand(0, k.width()), 0), // randomly spawn from the top position
 		k.area(), // for collision
 		k.body(), // for gravity
+		leaf_component(),
 		"leaf",
 		"leaf--falling",
 	]);
-	const start_time = Date.now();
 
 	k.debug.log(`Leaf spawned at ${leaf.pos.x} ${leaf.pos.y}`);
 
@@ -55,7 +64,7 @@ function spawn_leaf(size = [25, 25]) {
 		// gravity logic here
 		leaf.move(
 			0,
-			0.5 * ACCELERATON_G * Math.pow((Date.now() - start_time) / 1000, 2)
+			0.5 * ACCELERATON_G * Math.pow((Date.now() - leaf.start_time) / 1000, 2)
 		);
 
 		leaf.onCollide("ground", () => {
