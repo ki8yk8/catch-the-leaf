@@ -4,10 +4,16 @@ const k = kaplay();
 
 k.loadRoot("./");
 
-const PLAYER_SPEED = 400;
+const PLAYER_INITIAL_SPEED = 1000;
 const ACCELERATON_G = 100; // in pixels per second square
+const ACCElERATION_BASKET = 1200;
 const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 20;
+
+const key_register = {
+	left: null,
+	right: null,
+};
 
 const ground = k.add([
 	k.rect(k.width(), GROUND_HEIGHT),
@@ -27,8 +33,38 @@ const basket = k.add([
 
 k.onUpdate(() => {
 	// check if there was a key movement
-	if (k.isKeyDown("left")) basket.move(-1 * PLAYER_SPEED, 0);
-	if (k.isKeyDown("right")) basket.move(PLAYER_SPEED, 0);
+	if (k.isKeyDown("left")) {
+		if (!key_register["left"]) {
+			key_register["left"] = Date.now();
+		} else {
+			const t = (Date.now() - key_register["left"]) / 1000;
+			basket.move(
+				-1 *
+					(PLAYER_INITIAL_SPEED * t +
+						0.5 * ACCElERATION_BASKET * Math.pow(t, 2)),
+				0
+			);
+		}
+	}
+	if (k.isKeyReleased("left")) {
+		key_register["left"] = null;
+	}
+
+	if (k.isKeyDown("right")) {
+		if (!key_register["right"]) {
+			key_register["right"] = Date.now();
+		} else {
+			const t = (Date.now() - key_register["right"]) / 1000;
+
+			basket.move(
+				PLAYER_INITIAL_SPEED * t + 0.5 * ACCElERATION_BASKET * Math.pow(t, 2),
+				0
+			);
+		}
+	}
+	if (k.isKeyReleased("right")) {
+		key_register["right"] = null;
+	}
 
 	// clamping logic here
 	const [b_x, b_y] = [k.width(), k.height()]; // boundary
