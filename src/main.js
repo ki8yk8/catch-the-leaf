@@ -58,24 +58,28 @@ function spawn_leaf(size = [25, 25]) {
 	]);
 
 	k.debug.log(`Leaf spawned at ${leaf.pos.x} ${leaf.pos.y}`);
-
-	// on each frame do this
-	leaf.onUpdate(() => {
-		// gravity logic here
-		leaf.move(
-			0,
-			0.5 * ACCELERATON_G * Math.pow((Date.now() - leaf.start_time) / 1000, 2)
-		);
-
-		leaf.onCollide("ground", () => {
-			k.destroy(leaf);
-		});
+	leaf.onCollide("ground", () => {
+		leaf.unuse("leaf--falling");
+		leaf.use("leaf--on-ground");
 	});
 }
 
 // spawn a leaf every 2 seconds
 k.loop(LEAF_INTERVAL, () => {
 	spawn_leaf();
+});
+
+// at every frame
+k.onUpdate(() => {
+	const now = Date.now();
+
+	for (const leaf of k.get("leaf--falling")) {
+		// gravity logic here
+		leaf.move(
+			0,
+			0.5 * ACCELERATON_G * Math.pow((now - leaf.start_time) / 1000, 2)
+		);
+	}
 });
 
 k.debug.log(`Screen width and height = (${k.width()}, ${k.height()})`);
