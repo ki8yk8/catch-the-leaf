@@ -1,6 +1,8 @@
 import kaplay from "kaplay";
 
-const k = kaplay();
+const k = kaplay({
+	background: "#fdfffc",
+});
 
 k.loadRoot("./");
 
@@ -8,7 +10,7 @@ const PLAYER_INITIAL_SPEED = 1000;
 const ACCELERATON_G = 100; // in pixels per second square
 const ACCElERATION_BASKET = 1200;
 const LEAF_INTERVAL = 1; // in seconds
-const GROUND_HEIGHT = 20;
+const GROUND_HEIGHT = 40;
 
 const key_register = {
 	left: null,
@@ -18,6 +20,7 @@ const key_register = {
 const ground = k.add([
 	k.rect(k.width(), GROUND_HEIGHT),
 	k.pos(k.width() / 2, k.height()),
+	k.color("#011627"),
 	k.anchor("bot"),
 	k.area(),
 	k.body({ isStatic: true }),
@@ -27,7 +30,8 @@ const ground = k.add([
 // creating basket and registering the handle buttons
 const basket = k.add([
 	k.rect(100, 80),
-	k.pos(k.width() / 2, k.height()),
+	k.pos(k.width() / 2, k.height()-GROUND_HEIGHT-2),
+	k.color("#7765e3"),
 	k.anchor("bot"),
 ]);
 
@@ -86,6 +90,7 @@ function leaf_component() {
 function spawn_leaf(size = [25, 25]) {
 	const leaf = k.add([
 		k.rect(...size),
+		k.color("#ff9f1c"),
 		k.pos(k.rand(0, k.width()), 0), // randomly spawn from the top position
 		k.area(), // for collision
 		k.body(), // for gravity
