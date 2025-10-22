@@ -13,8 +13,9 @@ if (process.env.NODE_ENV === "development") {
 	k.debug.inspect = false;
 }
 
+k.setGravity(400);
+
 const PLAYER_INITIAL_SPEED = 1000;
-const ACCELERATON_G = 100; // in pixels per second square
 const ACCElERATION_BASKET = 1200;
 const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 40;
@@ -97,17 +98,4 @@ k.onUpdate(() => {
 // spawn a leaf every 2 seconds
 k.loop(LEAF_INTERVAL, () => {
 	spawn_leaf(k);
-});
-
-// at every frame
-k.onUpdate(() => {
-	const now = Date.now();
-
-	for (const leaf of k.get("leaf--falling")) {
-		// gravity logic here
-		leaf.move(
-			0,
-			0.5 * ACCELERATON_G * Math.pow((now - leaf.start_time) / 1000, 2)
-		);
-	}
 });
