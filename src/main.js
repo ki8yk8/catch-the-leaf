@@ -1,36 +1,22 @@
 import kaplay from "kaplay";
 
-const k = kaplay({
-	background: "#d46eb3",
-});
+const k = kaplay({});
 
 k.loadRoot("./");
 
-// working with objects
+// creating basket and registering the handle buttons
 const basket = k.add([
-	k.rect(32, 32),
-	k.pos(10, 20),
-	k.area(),
-	k.body(),
-	"shape",
+	k.rect(100, 80),
+	k.pos(k.width() / 2, k.height()),
+	k.anchor("bot"),
 ]);
-k.setGravity(10);
-k.onKeyDown("right", () => {
-	// basket.move(200, 0);
-	basket.jump();
+
+basket.onKeyDown("left", () => {
+	basket.move(-400, 0);
+});
+basket.onKeyDown("right", () => {
+	k.debug.log(k.pos)
+	basket.move(400, 0);
 });
 
-// working with scenes
-// k.loadBean();
-// k.scene("scenename", () => {
-// 	k.add([k.sprite("bean"), k.color(k.RED)]);
-// 	k.onKeyPress(() => {
-// 		k.go("bluebean");
-// 	});
-// });
-
-// k.scene("bluebean", () => {
-// 	k.add([k.sprite("bean"), k.color(k.BLUE)]);
-// });
-
-// k.go("scenename");
+k.debug.log(`Screen width and height = (${k.width()}, ${k.height()})`);
