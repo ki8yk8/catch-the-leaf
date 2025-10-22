@@ -7,6 +7,15 @@ k.loadRoot("./");
 const PLAYER_SPEED = 400;
 const ACCELERATON_G = 100; // in pixels per second square
 const LEAF_INTERVAL = 1; // in seconds
+const GROUND_HEIGHT = 20;
+
+const ground = k.add([
+	k.rect(k.width(), GROUND_HEIGHT),
+	k.pos(k.width() / 2, k.height()),
+	k.anchor("bot"),
+	k.area(),
+	"ground",
+]);
 
 // creating basket and registering the handle buttons
 const basket = k.add([
@@ -48,6 +57,10 @@ function spawn_leaf(size = [25, 25]) {
 			0,
 			0.5 * ACCELERATON_G * Math.pow((Date.now() - start_time) / 1000, 2)
 		);
+
+		leaf.onCollide("ground", () => {
+			k.destroy(leaf);
+		});
 	});
 }
 
