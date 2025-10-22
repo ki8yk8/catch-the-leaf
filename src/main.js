@@ -5,9 +5,8 @@ const k = kaplay();
 k.loadRoot("./");
 
 const PLAYER_SPEED = 400;
-const GRAVITY = 50;
-
-k.setGravity(GRAVITY); // global gravity
+const ACCELERATON_G = 100; // in pixels per second square
+const LEAF_INTERVAL = 1; // in seconds
 
 // creating basket and registering the handle buttons
 const basket = k.add([
@@ -38,12 +37,22 @@ function spawn_leaf(size = [25, 25]) {
 		"leaf",
 		"leaf--falling",
 	]);
+	const start_time = Date.now();
 
 	k.debug.log(`Leaf spawned at ${leaf.pos.x} ${leaf.pos.y}`);
+
+	// on each frame do this
+	leaf.onUpdate(() => {
+		// gravity logic here
+		leaf.move(
+			0,
+			0.5 * ACCELERATON_G * Math.pow((Date.now() - start_time) / 1000, 2)
+		);
+	});
 }
 
 // spawn a leaf every 2 seconds
-k.loop(2, () => {
+k.loop(LEAF_INTERVAL, () => {
 	spawn_leaf();
 });
 
