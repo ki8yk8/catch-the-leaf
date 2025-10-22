@@ -39,7 +39,17 @@ const basket = k.add([
 	k.pos(k.width() / 2, k.height()-GROUND_HEIGHT-2),
 	k.color("#7765e3"),
 	k.anchor("bot"),
+	k.area(),
+	k.body({isStatic: true}),
+	"basket",
 ]);
+basket.add([
+	k.rect(basket.width, basket.height*0.2),
+	k.pos(0, -basket.height),
+	k.anchor("top"),
+	k.area(),
+	"eat-area"
+])
 
 k.onUpdate(() => {
 	// check if there was a key movement
@@ -109,6 +119,10 @@ function spawn_leaf(size = [25, 25]) {
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
 	});
+
+	leaf.onCollide("eat-area", () => {
+		k.destroy(leaf);
+	})
 }
 
 // spawn a leaf every 2 seconds
