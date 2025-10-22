@@ -6,6 +6,12 @@ const k = kaplay({
 
 k.loadRoot("./");
 
+if (process.env.NODE_ENV === "development") {
+	k.debug.inspect = true;
+} else {
+	k.debug.inspect = false;
+}
+
 const PLAYER_INITIAL_SPEED = 1000;
 const ACCELERATON_G = 100; // in pixels per second square
 const ACCElERATION_BASKET = 1200;
@@ -99,7 +105,6 @@ function spawn_leaf(size = [25, 25]) {
 		"leaf--falling",
 	]);
 
-	k.debug.log(`Leaf spawned at ${leaf.pos.x} ${leaf.pos.y}`);
 	leaf.onCollide("ground", () => {
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
@@ -123,5 +128,3 @@ k.onUpdate(() => {
 		);
 	}
 });
-
-k.debug.log(`Screen width and height = (${k.width()}, ${k.height()})`);
