@@ -14,6 +14,7 @@ const ground = k.add([
 	k.pos(k.width() / 2, k.height()),
 	k.anchor("bot"),
 	k.area(),
+	k.body({ isStatic: true }),
 	"ground",
 ]);
 
