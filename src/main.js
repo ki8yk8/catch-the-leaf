@@ -5,11 +5,15 @@ import { registerGameOverScene } from "./scenes/gameover";
 
 const k = kaplay({
 	background: "#fdfffc",
+	global: false,
 });
 
 k.loadRoot("./");
 
-loadSprite("heart", "/sprites/heart.png");
+k.loadSprite("heart", "/sprites/heart.png");
+k.loadSprite("steel", "/sprites/steel.png");
+k.loadSprite("grass", "/sprites/grass.png");
+k.loadSprite("leaf", "/sprites/leaf.png");
 
 
 if (process.env.NODE_ENV === "development") {
