@@ -2,6 +2,7 @@ import { Basket } from "../objects/basket";
 import { Ground } from "../objects/ground";
 import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
+import { Scenery } from "../objects/scenery";
 
 const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 64;
@@ -15,6 +16,7 @@ export function registerGameplayScene(k) {
 			ground_leafs: 0,
 		};
 
+		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT });
 		const ground = Ground({
 			k,
 			ground_height: GROUND_HEIGHT,

@@ -15,5 +15,25 @@ export function Ground({ k, ground_height }) {
 		ground_rect.add([k.sprite("grass"), k.pos(i * GRASS_SIZE, 0), k.z(2)]);
 	}
 
+	// add some flowers
+	[20, 440].forEach((pos) => {
+		ground_rect.add([
+			k.sprite("flower"),
+			k.anchor("bot"),
+			k.pos(pos, 0),
+			"flower",
+		]);
+	});
+
+	// add some mushrooms
+	[520].forEach(pos => {
+		ground_rect.add([
+			k.sprite("mushroom"),
+			k.anchor("bot"),
+			k.pos(pos, 0),
+			"mushroom",
+		])
+	})
+
 	return ground_rect;
 }

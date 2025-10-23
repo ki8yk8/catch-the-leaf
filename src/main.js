@@ -19,6 +19,12 @@ k.loadSprite("heart", "/sprites/heart.png");
 k.loadSprite("steel", "/sprites/steel.png");
 k.loadSprite("grass", "/sprites/grass.png");
 k.loadSprite("leaf", "/sprites/leaf.png");
+k.loadSprite("butterfly", "/sprites/btfly.png");
+k.loadSprite("cloud", "/sprites/cloud.png");
+k.loadSprite("flower", "/sprites/flowy.png");
+k.loadSprite("moon", "/sprites/moon.png");
+k.loadSprite("mushroom", "/sprites/mushroom.png");
+k.loadSprite("sun", "/sprites/sun.png");
 
 if (process.env.NODE_ENV === "development") {
 	k.debug.inspect = true;
