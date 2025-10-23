@@ -13,7 +13,7 @@ const DISAPPEAR_ON_GROUND = 3;
 export function spawn_leaf({k, size = [25, 25], onCatch, onDrop}) {
 	const leaf = k.add([
 		k.sprite("leaf"),
-		k.pos(k.rand(0, k.width()), 0), // randomly spawn from the top position
+		k.pos(k.rand(0, k.width()-38), 0), // randomly spawn from the top position
 		k.area(), // for collision
 		k.body(), // for gravity
 		leaf_component(),
