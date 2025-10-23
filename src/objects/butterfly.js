@@ -10,7 +10,7 @@ export function Butterfly({ k }) {
 		k.sprite("butterfly"),
 		k.pos(start_x, random_ht),
 		k.anchor("center"),
-		k.scale(0.8)
+		k.scale(0.8),
 	]);
 
 	k.onUpdate(() => {
