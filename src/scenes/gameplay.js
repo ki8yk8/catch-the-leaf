@@ -4,7 +4,7 @@ import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
 
 const LEAF_INTERVAL = 1; // in seconds
-const GROUND_HEIGHT = 40;
+const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 
 export function registerGameplayScene(k) {
