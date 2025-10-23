@@ -7,6 +7,10 @@ const GROUND_HEIGHT = 40;
 
 export function registerGameplayScene(k) {
 	k.scene("gameplay", () => {
+		const game = {
+			timer: 3,
+		};
+
 		const key_register = {
 			left: null,
 			right: null,
@@ -39,6 +43,32 @@ export function registerGameplayScene(k) {
 			k.area(),
 			"eat-area",
 		]);
+
+		const start_timer_loop = k.loop(1, () => {
+			const text = k.add([
+				k.text(game.timer === 0 ? "Game On" : `${game.timer}`, {
+					size: 64,
+					align: "center",
+				}),
+				k.pos(k.width() / 2, k.height() / 2),
+				k.color("#b2b2b2"),
+				k.anchor("center"),
+			]);
+
+			game.timer--;
+
+			k.wait(1, () => {
+				k.destroy(text);
+			});
+
+			if (game.timer === -1) {
+				// spawn a leaf every 2 seconds
+				k.loop(LEAF_INTERVAL, () => {
+					spawn_leaf(k);
+				});
+				start_timer_loop.cancel();
+			}
+		});
 
 		k.onUpdate(() => {
 			// check if there was a key movement
@@ -81,11 +111,6 @@ export function registerGameplayScene(k) {
 			const [p_x, p_y] = [basket.pos.x, basket.pos.y]; // basket
 
 			basket.pos.x = k.clamp(p_x, basket.width / 2, b_x - basket.width / 2);
-		});
-
-		// spawn a leaf every 2 seconds
-		k.loop(LEAF_INTERVAL, () => {
-			spawn_leaf(k);
 		});
 	});
 }
