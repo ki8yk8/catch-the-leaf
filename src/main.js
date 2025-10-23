@@ -9,6 +9,9 @@ const k = kaplay({
 
 k.loadRoot("./");
 
+loadSprite("heart", "/sprites/heart.png");
+
+
 if (process.env.NODE_ENV === "development") {
 	k.debug.inspect = true;
 } else {
@@ -21,4 +24,4 @@ registerGameplayScene(k);
 registerStartScene(k);
 registerGameOverScene(k);
 
-k.go("gameover", 10);
+k.go("startgame");

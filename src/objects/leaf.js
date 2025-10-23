@@ -10,7 +10,7 @@ function leaf_component() {
 const DISAPPEAR_ON_GROUND = 3;
 
 // randomly spawn leaf at the top
-export function spawn_leaf({k, size = [25, 25], onCatch}) {
+export function spawn_leaf({k, size = [25, 25], onCatch, onDrop}) {
 	const leaf = k.add([
 		k.rect(...size),
 		k.color("#ff9f1c"),
@@ -25,6 +25,8 @@ export function spawn_leaf({k, size = [25, 25], onCatch}) {
 	leaf.onCollide("ground", () => {
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
+
+		onDrop?.();
 
 		k.wait(DISAPPEAR_ON_GROUND, () => {
 			k.destroy(leaf);
