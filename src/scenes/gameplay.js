@@ -1,7 +1,7 @@
+import { Basket } from "../objects/basket";
+import { Ground } from "../objects/ground";
 import { spawn_leaf } from "../objects/leaf";
 
-const PLAYER_INITIAL_SPEED = 1000;
-const ACCElERATION_BASKET = 1200;
 const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 40;
 
@@ -9,41 +9,32 @@ export function registerGameplayScene(k) {
 	k.scene("gameplay", () => {
 		const game = {
 			timer: 3,
+			score: 0,
 		};
 
-		const key_register = {
-			left: null,
-			right: null,
+		const ground = Ground({
+			k,
+			ground_height: GROUND_HEIGHT,
+		});
+		const basket = Basket({
+			k,
+			ground_height: GROUND_HEIGHT,
+		});
+
+		const score_text = k.add([
+			k.text(`Score: ${game.score}`, {
+				size: 32,
+				align: "center",
+			}),
+			k.color("#000000"),
+			k.anchor("topright"),
+			k.pos(k.width() - 25, 25),
+		]);
+
+		const handle_leaf_caught = () => {
+			game.score++;
+			score_text.text = `Score: ${game.score}`;
 		};
-
-		const ground = k.add([
-			k.rect(k.width(), GROUND_HEIGHT),
-			k.pos(k.width() / 2, k.height()),
-			k.color("#011627"),
-			k.anchor("bot"),
-			k.area(),
-			k.body({ isStatic: true }),
-			"ground",
-		]);
-
-		// creating basket and registering the handle buttons
-		const basket = k.add([
-			k.rect(100, 80),
-			k.pos(k.width() / 2, k.height() - GROUND_HEIGHT - 2),
-			k.color("#7765e3"),
-			k.anchor("bot"),
-			k.area(),
-			k.body({ isStatic: true }),
-			"basket",
-		]);
-
-		basket.add([
-			k.rect(basket.width, basket.height * 0.2),
-			k.pos(0, -basket.height),
-			k.anchor("top"),
-			k.area(),
-			"eat-area",
-		]);
 
 		const timer_text = k.add([
 			k.text(`3`, {
@@ -64,54 +55,11 @@ export function registerGameplayScene(k) {
 			} else if (game.timer === -2) {
 				// spawn a leaf every 2 seconds
 				k.loop(LEAF_INTERVAL, () => {
-					spawn_leaf(k);
+					spawn_leaf({ k: k, onCatch: handle_leaf_caught });
 				});
 				start_timer_loop.cancel();
 				k.destroy(timer_text);
 			}
-		});
-
-		k.onUpdate(() => {
-			// check if there was a key movement
-			if (k.isKeyDown("left")) {
-				if (!key_register["left"]) {
-					key_register["left"] = Date.now();
-				} else {
-					const t = (Date.now() - key_register["left"]) / 1000;
-					basket.move(
-						-1 *
-							(PLAYER_INITIAL_SPEED * t +
-								0.5 * ACCElERATION_BASKET * Math.pow(t, 2)),
-						0
-					);
-				}
-			}
-			if (k.isKeyReleased("left")) {
-				key_register["left"] = null;
-			}
-
-			if (k.isKeyDown("right")) {
-				if (!key_register["right"]) {
-					key_register["right"] = Date.now();
-				} else {
-					const t = (Date.now() - key_register["right"]) / 1000;
-
-					basket.move(
-						PLAYER_INITIAL_SPEED * t +
-							0.5 * ACCElERATION_BASKET * Math.pow(t, 2),
-						0
-					);
-				}
-			}
-			if (k.isKeyReleased("right")) {
-				key_register["right"] = null;
-			}
-
-			// clamping logic here
-			const [b_x, b_y] = [k.width(), k.height()]; // boundary
-			const [p_x, p_y] = [basket.pos.x, basket.pos.y]; // basket
-
-			basket.pos.x = k.clamp(p_x, basket.width / 2, b_x - basket.width / 2);
 		});
 	});
 }

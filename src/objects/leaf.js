@@ -8,7 +8,7 @@ function leaf_component() {
 }
 
 // randomly spawn leaf at the top
-export function spawn_leaf(k, size = [25, 25]) {
+export function spawn_leaf({k, size = [25, 25], onCatch}) {
 	const leaf = k.add([
 		k.rect(...size),
 		k.color("#ff9f1c"),
@@ -27,5 +27,6 @@ export function spawn_leaf(k, size = [25, 25]) {
 
 	leaf.onCollide("eat-area", () => {
 		k.destroy(leaf);
+		onCatch?.();
 	})
 }
