@@ -1,3 +1,5 @@
+import { Butterfly } from "./butterfly";
+
 export function Scenery({ k, ground_height }) {
 	const scenery_rect = k.add([
 		k.rect(k.width(), k.height() - ground_height),
@@ -47,6 +49,13 @@ export function Scenery({ k, ground_height }) {
 		const s = 1 + 0.15 * Math.sin(t * 0.8);
 		sun.scale = k.vec2(s);
 	});
+
+	// randomly a buttefly appears mmoving in sine pattern across the screen
+	function spawn_butterfly_randomly() {
+		Butterfly({ k });
+		k.wait(k.rand(5, 30), spawn_butterfly_randomly);
+	}
+	spawn_butterfly_randomly();
 
 	return scenery_rect;
 }
