@@ -15,14 +15,16 @@ export function Scenery({ k, ground_height }) {
 	// add clouds with parallax effect farther it is controlled by scale the slower it moves
 	// position is defined as [x, y, z] z is between 0 and 1. 0 is very close and 1 is infinite
 	[
-		[150, 150, 0],
-		[350, 200, 0.4],
+		[150, 150, 0.2],
+		[350, 200, 0.65],
 		[500, 100, 0.8],
+		[700, 220, 0.4],
 	].forEach((pos) => {
 		const cloud = scenery_rect.add([
 			k.sprite("cloud"),
 			k.pos(pos[0], pos[1]),
 			k.anchor("center"),
+			k.scale(k.clamp(1 - pos[2], 0.6, 1.2)),
 		]);
 
 		k.onUpdate(() => {
@@ -35,7 +37,7 @@ export function Scenery({ k, ground_height }) {
 				return;
 			}
 
-			cloud.move(-40, k.rand(2, 7) * Math.sin(t));
+			cloud.move(-5 / (pos[2] + 0.0001), k.rand(1, 10) * Math.sin(t));
 		});
 	});
 
