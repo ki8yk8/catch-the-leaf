@@ -1,7 +1,7 @@
 import { Basket } from "../objects/basket";
 import { Ground } from "../objects/ground";
+import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
-import { get_heart_string } from "../utils/hearts";
 
 const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 40;
@@ -24,22 +24,7 @@ export function registerGameplayScene(k) {
 			ground_height: GROUND_HEIGHT,
 		});
 
-		const heart_title = k.add([
-			k.text("Life: ", {
-				size: 32,
-			}),
-			k.anchor("topleft"),
-			k.pos(25, 25),
-			k.color("#000000"),
-		]);
-		const hearts = k.add([
-			k.text(get_heart_string(MAX_GROUND_LEAFS - game.ground_leafs), {
-				size: 32,
-			}),
-			k.anchor("topleft"),
-			k.pos(25 + heart_title.width, 25),
-			k.color("#ff0000"),
-		]);
+		let hearts_container = Hearts({ k, hearts: MAX_GROUND_LEAFS });
 
 		const score_text = k.add([
 			k.text(`Score: ${game.score}`, {
@@ -57,12 +42,17 @@ export function registerGameplayScene(k) {
 		};
 
 		const handle_leaf_missed = () => {
-			game.ground_leafs++;
 			if (game.ground_leafs === MAX_GROUND_LEAFS) {
 				k.go("gameover", game.score);
 			}
 
-			hearts.text = get_heart_string(MAX_GROUND_LEAFS - game.ground_leafs);
+			game.ground_leafs++;
+			k.destroy(hearts_container);
+
+			hearts_container = Hearts({
+				k,
+				hearts: MAX_GROUND_LEAFS - game.ground_leafs,
+			});
 		};
 
 		const timer_text = k.add([
