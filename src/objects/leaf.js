@@ -33,6 +33,12 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop }) {
 		});
 	});
 
+	leaf.onCollide("leaf", () => {
+		onDrop?.();
+
+		k.destroy(leaf);
+	});
+
 	// leaf should come with slight rotation
 	leaf.onUpdate(() => {
 		if (!leaf.is("leaf--on-ground")) {
