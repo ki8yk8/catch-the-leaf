@@ -36,6 +36,7 @@ export function registerGameplayScene(k) {
 			k.body({ isStatic: true }),
 			"basket",
 		]);
+
 		basket.add([
 			k.rect(basket.width, basket.height * 0.2),
 			k.pos(0, -basket.height),
@@ -44,29 +45,29 @@ export function registerGameplayScene(k) {
 			"eat-area",
 		]);
 
-		const start_timer_loop = k.loop(1, () => {
-			const text = k.add([
-				k.text(game.timer === 0 ? "Game On" : `${game.timer}`, {
-					size: 64,
-					align: "center",
-				}),
-				k.pos(k.width() / 2, k.height() / 2),
-				k.color("#b2b2b2"),
-				k.anchor("center"),
-			]);
+		const timer_text = k.add([
+			k.text(`3`, {
+				size: 64,
+				align: "center",
+			}),
+			k.pos(k.width() / 2, k.height() / 2),
+			k.color("#b2b2b2"),
+			k.anchor("center"),
+		]);
 
+		const start_timer_loop = k.loop(1, () => {
+			timer_text.text = game.timer.toString();
 			game.timer--;
 
-			k.wait(1, () => {
-				k.destroy(text);
-			});
-
 			if (game.timer === -1) {
+				timer_text.text = "START...";
+			} else if (game.timer === -2) {
 				// spawn a leaf every 2 seconds
 				k.loop(LEAF_INTERVAL, () => {
 					spawn_leaf(k);
 				});
 				start_timer_loop.cancel();
+				k.destroy(timer_text);
 			}
 		});
 
