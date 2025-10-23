@@ -7,6 +7,8 @@ function leaf_component() {
 	};
 }
 
+const DISAPPEAR_ON_GROUND = 3;
+
 // randomly spawn leaf at the top
 export function spawn_leaf({k, size = [25, 25], onCatch}) {
 	const leaf = k.add([
@@ -23,6 +25,10 @@ export function spawn_leaf({k, size = [25, 25], onCatch}) {
 	leaf.onCollide("ground", () => {
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
+
+		k.wait(DISAPPEAR_ON_GROUND, () => {
+			k.destroy(leaf);
+		})
 	});
 
 	leaf.onCollide("eat-area", () => {
