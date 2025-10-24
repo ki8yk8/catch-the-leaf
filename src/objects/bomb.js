@@ -9,9 +9,17 @@ export function Bomb({ k, padding }) {
 		"harmful",
 	]);
 
-	bomb.onCollide("ground", () => {
-		k.debug.log("bomb on ground")
-	})
+	const incoming_sound = k.play("fireball");
+
+	function extinguishFireball() {
+		incoming_sound.stop();
+		k.play("fireball-impact");
+
+		k.wait(1, () => k.destroy(bomb));
+	}
+
+	bomb.onCollide("ground", extinguishFireball);
+	bomb.onCollide("leaf", extinguishFireball);
 
 	return bomb;
 }
