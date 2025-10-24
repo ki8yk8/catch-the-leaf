@@ -2,12 +2,16 @@ import { Butterfly } from "./butterfly";
 
 const COLORS = {
 	morning_sky: "#5CB3F8",
+	black: "#ffffff",
+	red: "#ff0000",
 };
 
-export function Scenery({ k, ground_height, padding }) {
+const LEVEL_COLOR = ["morning_sky", "black", "red"];
+
+export function Scenery({ k, ground_height, padding, level = 100 }) {
 	const scenery_rect = k.add([
 		k.rect(k.width() - padding * 2, k.height() - ground_height),
-		k.color(COLORS.morning_sky),
+		k.color(COLORS[LEVEL_COLOR[(Math.floor(level / 4))] ?? LEVEL_COLOR.at(-1)]),
 		k.pos(padding, 0),
 	]);
 
