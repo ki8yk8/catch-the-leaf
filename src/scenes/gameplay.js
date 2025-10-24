@@ -9,6 +9,7 @@ const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 const LEVEL_INCREASE_SCORE = 5;
 const LEAF_INTERVAL_SLOPE = 0.1;
+const BONUS_LEVEL = 5;
 
 export function registerGameplayScene({ k, padding }) {
 	k.scene("gameplay", () => {
@@ -68,6 +69,43 @@ export function registerGameplayScene({ k, padding }) {
 
 			// cancels the current spawn loop
 			leaf_spawn_loop.cancel();
+
+			// if this is BONUS level then, the number of leafs to increment the user to next level should appear linearly
+			if (game.level % BONUS_LEVEL === 0) {
+				const random_x = k.rand(padding, k.width() - 38 - padding);
+
+				let i = 0;
+				const bonus_loop = k.loop(0.5, () => {
+					spawn_leaf({
+						k,
+						x: random_x,
+						onCatch: handle_leaf_caught,
+						onDrop: handle_leaf_missed,
+						padding,
+					});
+					i++;
+					if (i >= LEVEL_INCREASE_SCORE - 1) {
+						bonus_loop.cancel();
+					}
+				});
+
+				// after all bonus leafs are spawned then drop the regular leafs
+				k.wait(0.5 * LEVEL_INCREASE_SCORE, () => {
+					leaf_spawn_loop = k.loop(
+						LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE),
+						() => {
+							spawn_leaf({
+								k,
+								onCatch: handle_leaf_caught,
+								onDrop: handle_leaf_missed,
+								padding,
+							});
+						}
+					);
+				});
+
+				return;
+			}
 
 			// new loop with increased leaf_interval by LEAF_INTERVAL_SLOPE every level
 			leaf_spawn_loop = k.loop(
