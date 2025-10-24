@@ -64,6 +64,8 @@ export function registerGameplayScene({ k, padding }) {
 				k.color(255, 255, 255),
 				k.anchor("center"),
 			]);
+			// play sound
+			k.play("level");
 
 			k.wait(1, () => k.destroy(level_text));
 
