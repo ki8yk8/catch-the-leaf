@@ -1,14 +1,17 @@
 import { Basket } from "../objects/basket";
+import { Bomb } from "../objects/bomb";
 import { Ground } from "../objects/ground";
 import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
 import { Scenery } from "../objects/scenery";
 
 const LEAF_INTERVAL = 1; // in seconds
+const LEAF_INTERVAL_SLOPE = 0.1;
+const BOMB_INTERVAL = 5;
+const BOMB_SLOPE = 0.1;
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 const LEVEL_INCREASE_SCORE = 5;
-const LEAF_INTERVAL_SLOPE = 0.1;
 const BONUS_LEVEL = 5;
 
 export function registerGameplayScene({ k, padding }) {
@@ -51,6 +54,7 @@ export function registerGameplayScene({ k, padding }) {
 				handle_level_increase();
 		};
 
+		let bomb_spawn_loop = null;
 		const handle_level_increase = () => {
 			// increase the level word by 1
 			game.level++;
@@ -121,6 +125,12 @@ export function registerGameplayScene({ k, padding }) {
 					});
 				}
 			);
+
+			// on level increase start spawning the bombs or increase the bombing frequency
+			if (bomb_spawn_loop) bomb_spawn_loop.cancel();
+			bomb_spawn_loop = k.loop(BOMB_INTERVAL * (1 - BOMB_SLOPE), () => {
+				Bomb({ k, padding });
+			});
 		};
 
 		const handle_leaf_missed = () => {
@@ -166,6 +176,7 @@ export function registerGameplayScene({ k, padding }) {
 						padding,
 					});
 				});
+
 				start_timer_loop.cancel();
 				k.destroy(timer_text);
 			}

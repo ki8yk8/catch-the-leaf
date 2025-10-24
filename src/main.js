@@ -25,6 +25,21 @@ k.loadSprite("flower", "/sprites/flowy.png");
 k.loadSprite("moon", "/sprites/moon.png");
 k.loadSprite("mushroom", "/sprites/mushroom.png");
 k.loadSprite("sun", "/sprites/sun.png");
+k.loadSprite(
+	"firing",
+	"/sprites/firing.png"
+	// {
+	// sliceX: 2,
+	// anims: {
+	// 	anim: {
+	// 		from: 0,
+	// 		to: 1,
+	// 		loop: true,
+	// 		speed: 6.67,
+	// 	},
+	// },
+	// }
+);
 
 // loading sound starts here
 k.loadSound("catch", "/sounds/catch.mp3");
