@@ -26,6 +26,13 @@ k.loadSprite("moon", "/sprites/moon.png");
 k.loadSprite("mushroom", "/sprites/mushroom.png");
 k.loadSprite("sun", "/sprites/sun.png");
 
+// loading sound starts here
+k.loadSound("catch", "/sounds/catch.mp3");
+k.loadSound("click", "/sounds/click.mp3");
+k.loadSound("drop", "/sounds/drop.mp3");
+k.loadSound("gameover", "/sounds/gameover.mp3");
+k.loadSound("start", "/sounds/start.mp3");
+
 if (process.env.NODE_ENV === "development") {
 	k.debug.inspect = true;
 } else {

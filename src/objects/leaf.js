@@ -61,6 +61,7 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 
 	leaf.onCollide("ground", () => {
 		fireEmitter(ground_emitter);
+		k.play("drop");
 
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
@@ -74,7 +75,10 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 	});
 
 	leaf.onCollide("leaf", () => {
-		onDrop?.();
+		if (!leaf.is("leaf--on-ground")) {
+			onDrop?.();
+			k.play("drop");
+		}
 
 		k.destroy(leaf);
 	});
@@ -88,6 +92,7 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 	});
 
 	leaf.onCollide("eat-area", () => {
+		k.play("catch");
 		fireEmitter(basket_emitter, 50);
 		k.destroy(leaf);
 		onCatch?.();

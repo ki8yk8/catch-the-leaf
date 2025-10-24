@@ -69,6 +69,7 @@ export function registerGameplayScene({ k, padding }) {
 			k.color("#b2b2b2"),
 			k.anchor("center"),
 		]);
+		k.play("start");
 
 		const start_timer_loop = k.loop(1, () => {
 			timer_text.text = game.timer.toString();

@@ -1,5 +1,8 @@
 export function registerGameOverScene({ k }) {
 	k.scene("gameover", (score) => {
+		// play the failed sound
+		k.play("gameover");
+
 		const score_title = k.add([
 			k.text("You Scored", {
 				size: 18,
