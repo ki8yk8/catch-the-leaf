@@ -21,7 +21,7 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 		"leaf--falling",
 	]);
 
-	const emitter = k.add([
+	const ground_emitter = k.add([
 		k.pos(k.center()),
 		k.particles(
 			{
@@ -30,21 +30,37 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 				lifeTime: [0.4, 0.8],
 				angle: [260, 280],
 				opacities: [1.0, 0.0],
-				colors: [195, 106, 62],
-				scale: [1, 4],
+				colors: [k.rgb([195, 106, 62])],
+				scale: [1.0, 0.4],
 			},
 			{ direction: 270, spread: 60 }
 		),
 	]);
+	const basket_emitter = k.add([
+		k.pos(k.center()),
+		k.particles(
+			{
+				max: 50,
+				speed: [40, 90],
+				lifeTime: [0.4, 0.5],
+				angle: [80, 100],
+				opacities: [1.0, 0.0],
+				colors: [k.rgb(255, 255, 0)],
+				scale: [1.0, 0.4],
+			},
+			{ direction: 270, spread: 360 }
+		),
+	]);
 
-	function fireEmitter() {
+	function fireEmitter(emitter, n = 15) {
 		emitter.pos.x = leaf.pos.x + leaf.width / 2;
 		emitter.pos.y = leaf.pos.y + leaf.height;
-		emitter.emit(15);
+		emitter.emit(n);
+		k.wait(1, () => k.destroy(emitter));
 	}
 
 	leaf.onCollide("ground", () => {
-		fireEmitter();
+		fireEmitter(ground_emitter);
 
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
@@ -72,6 +88,7 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 	});
 
 	leaf.onCollide("eat-area", () => {
+		fireEmitter(basket_emitter, 50);
 		k.destroy(leaf);
 		onCatch?.();
 	});
