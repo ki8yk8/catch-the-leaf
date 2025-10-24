@@ -69,35 +69,31 @@ export function Scenery({ k, ground_height, padding, mode = 0 }) {
 
 	// react on mode change
 	k.onUpdate(() => {
-		console.log(sun.sprite);
 		if (scenery_rect.mode) {
 			if (sun.sprite === "sun") sun.use(k.sprite("moon"));
 
 			scenery_rect.get("cloud").forEach((cloud) => {
-				if (cloud.sprite === "cloud-light") cloud.sprite = "cloud-dark";
+				if (cloud.sprite === "cloud-light") cloud.use(k.sprite("cloud-dark"));
 			});
 
 			k.get("butterfly", {
 				recursive: true,
 			}).forEach((butterfly) => {
-				if (butterfly.sprite === "butterfly") butterfly.sprite = "ghost";
+				if (butterfly.sprite === "butterfly") butterfly.use(k.sprite("ghost"));
 			});
 
 			scenery_rect.color = k.Color.fromHex(COLORS[LEVEL_COLOR[1]]);
 		} else {
-			if (sun.sprite === "moon") {
-				console.log("I reached ehre")
-				sun.use(k.sprite("sun"));
-			}
+			if (sun.sprite === "moon") sun.use(k.sprite("sun"));
 
 			scenery_rect.get("cloud").forEach((cloud) => {
-				if (cloud.sprite === "cloud-dark") cloud.sprite = "cloud-light";
+				if (cloud.sprite === "cloud-dark") cloud.use(k.sprite("cloud-light"));
 			});
 
 			k.get("butterfly", {
 				recursive: true,
 			}).forEach((butterfly) => {
-				if (butterfly.sprite === "ghost") butterfly.sprite = "butterfly";
+				if (butterfly.sprite === "ghost") butterfly.use(k.sprite("butterfly"));
 			});
 
 			scenery_rect.color = k.Color.fromHex(COLORS[LEVEL_COLOR[0]]);
