@@ -98,7 +98,7 @@ export function registerGameplayScene({ k, padding }) {
 				// after all bonus leafs are spawned then drop the regular leafs
 				k.wait(0.5 * LEVEL_INCREASE_SCORE, () => {
 					leaf_spawn_loop = k.loop(
-						LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE),
+						LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE * game.level),
 						() => {
 							spawn_leaf({
 								k,
@@ -115,7 +115,7 @@ export function registerGameplayScene({ k, padding }) {
 
 			// new loop with increased leaf_interval by LEAF_INTERVAL_SLOPE every level
 			leaf_spawn_loop = k.loop(
-				LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE),
+				LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE * game.level),
 				() => {
 					spawn_leaf({
 						k,
@@ -128,9 +128,12 @@ export function registerGameplayScene({ k, padding }) {
 
 			// on level increase start spawning the bombs or increase the bombing frequency
 			if (bomb_spawn_loop) bomb_spawn_loop.cancel();
-			bomb_spawn_loop = k.loop(BOMB_INTERVAL * (1 - BOMB_SLOPE), () => {
-				Bomb({ k, padding, onHit: handle_bomb_hit });
-			});
+			bomb_spawn_loop = k.loop(
+				BOMB_INTERVAL * (1 - BOMB_SLOPE * game.level),
+				() => {
+					Bomb({ k, padding, onHit: handle_bomb_hit });
+				}
+			);
 		};
 
 		// on bomb hit score decreases by 10
