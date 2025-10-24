@@ -1,8 +1,13 @@
 import { Butterfly } from "./butterfly";
 
+const COLORS = {
+	morning_sky: "#5CB3F8",
+};
+
 export function Scenery({ k, ground_height }) {
 	const scenery_rect = k.add([
 		k.rect(k.width(), k.height() - ground_height),
+		k.color(COLORS.morning_sky),
 		k.pos(0, 0),
 	]);
 

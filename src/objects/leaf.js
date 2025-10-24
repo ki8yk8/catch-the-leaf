@@ -25,6 +25,19 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop }) {
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
 
+		leaf.add([
+			k.pos(k.center()),
+			k.particles(
+				{
+					max: 10,
+					speed: [50, 50],
+					lifetime: [1, 2],
+					color: ["#ff0000"]
+				},
+				{ direction: 0, spread: 45 }
+			),
+		]);
+
 		onDrop?.();
 		leaf.vel.x = 0;
 
