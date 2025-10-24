@@ -20,7 +20,7 @@ export function registerGameplayScene({ k, padding }) {
 			timer: 3,
 			score: 0,
 			ground_leafs: 0,
-			level: 1,
+			level: 0,
 		};
 
 		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT, padding });

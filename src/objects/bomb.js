@@ -41,13 +41,9 @@ export function Bomb({ k, padding, onHit }) {
 		),
 	]);
 
-	const incoming_sound = k.play("fireball", {
-		loop: true,
-	});
+	k.play("fireball");
 
 	function extinguishFireball() {
-		incoming_sound.stop();
-
 		inner_explosion_emitter.pos.x = bomb.pos.x;
 		outer_explosion_emitter.pos.x = bomb.pos.x;
 		inner_explosion_emitter.pos.y = bomb.pos.y;
