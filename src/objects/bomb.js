@@ -9,7 +9,9 @@ export function Bomb({ k, padding }) {
 		"harmful",
 	]);
 
-	const incoming_sound = k.play("fireball");
+	const incoming_sound = k.play("fireball", {
+		loop: true,
+	});
 
 	function extinguishFireball() {
 		incoming_sound.stop();
