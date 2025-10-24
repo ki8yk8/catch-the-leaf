@@ -6,7 +6,7 @@ import { registerGameOverScene } from "./scenes/gameover";
 const k = kaplay({
 	canvas: document.getElementById("game"),
 	background: "#fdfffc",
-	width: 600,
+	width: 768,
 	height: window.innerHeight,
 	scale: 1,
 	stretch: false,
@@ -34,8 +34,31 @@ if (process.env.NODE_ENV === "development") {
 
 k.setGravity(400);
 
-registerGameplayScene(k);
-registerStartScene(k);
-registerGameOverScene(k);
+const GAME_PADDING = 64;
+
+// adding the side borders
+const total_bricks = Math.ceil(k.height() / 64);
+for (let i = 0; i < total_bricks; i++) {
+	k.add([
+		k.sprite("steel"),
+		k.pos(0, i * 64),
+		k.anchor("topleft"),
+		k.body({ isStatic: true }),
+		k.stay(),
+		k.z(10),
+	]);
+	k.add([
+		k.sprite("steel"),
+		k.pos(k.width(), i * 64),
+		k.anchor("topright"),
+		k.body({ isStatic: true }),
+		k.stay(),
+		k.z(10),
+	]);
+}
+
+registerGameplayScene({ k, padding: GAME_PADDING });
+registerStartScene({ k, padding: GAME_PADDING });
+registerGameOverScene({ k, padding: GAME_PADDING });
 
 k.go("startgame");

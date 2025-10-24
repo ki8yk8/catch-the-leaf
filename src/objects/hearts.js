@@ -1,6 +1,6 @@
-export function Hearts({ k, hearts }) {
+export function Hearts({ k, hearts, padding }) {
 	const hearts_container = k.add([
-		k.pos(25, 25),
+		k.pos(25 + padding, 25),
 		k.anchor("topleft"),
 		k.fixed(),
 	]);

@@ -8,7 +8,7 @@ const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 
-export function registerGameplayScene(k) {
+export function registerGameplayScene({ k, padding }) {
 	k.scene("gameplay", () => {
 		const game = {
 			timer: 3,
@@ -16,17 +16,19 @@ export function registerGameplayScene(k) {
 			ground_leafs: 0,
 		};
 
-		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT });
+		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT, padding });
 		const ground = Ground({
 			k,
 			ground_height: GROUND_HEIGHT,
+			padding,
 		});
 		const basket = Basket({
 			k,
 			ground_height: GROUND_HEIGHT,
+			padding,
 		});
 
-		let hearts_container = Hearts({ k, hearts: MAX_GROUND_LEAFS });
+		let hearts_container = Hearts({ k, hearts: MAX_GROUND_LEAFS, padding });
 
 		const score_text = k.add([
 			k.text(`Score: ${game.score}`, {
@@ -35,7 +37,7 @@ export function registerGameplayScene(k) {
 			}),
 			k.color("#000000"),
 			k.anchor("topright"),
-			k.pos(k.width() - 25, 25),
+			k.pos(k.width() - 25 - padding, 25),
 		]);
 
 		const handle_leaf_caught = () => {
@@ -54,6 +56,7 @@ export function registerGameplayScene(k) {
 			hearts_container = Hearts({
 				k,
 				hearts: MAX_GROUND_LEAFS - game.ground_leafs,
+				padding,
 			});
 		};
 
@@ -62,7 +65,7 @@ export function registerGameplayScene(k) {
 				size: 64,
 				align: "center",
 			}),
-			k.pos(k.width() / 2, k.height() / 2),
+			k.pos(k.width() / 2, (k.height() * 1) / 3),
 			k.color("#b2b2b2"),
 			k.anchor("center"),
 		]);
@@ -77,9 +80,10 @@ export function registerGameplayScene(k) {
 				// spawn a leaf every 2 seconds
 				k.loop(LEAF_INTERVAL, () => {
 					spawn_leaf({
-						k: k,
+						k,
 						onCatch: handle_leaf_caught,
 						onDrop: handle_leaf_missed,
+						padding,
 					});
 				});
 				start_timer_loop.cancel();

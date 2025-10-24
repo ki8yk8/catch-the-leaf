@@ -4,17 +4,17 @@ const COLORS = {
 	morning_sky: "#5CB3F8",
 };
 
-export function Scenery({ k, ground_height }) {
+export function Scenery({ k, ground_height, padding }) {
 	const scenery_rect = k.add([
-		k.rect(k.width(), k.height() - ground_height),
+		k.rect(k.width() - padding * 2, k.height() - ground_height),
 		k.color(COLORS.morning_sky),
-		k.pos(0, 0),
+		k.pos(padding, 0),
 	]);
 
 	// add sun
 	const sun = scenery_rect.add([
 		k.sprite("sun"),
-		k.pos((k.width() * 1) / 6, k.height() * 0.2),
+		k.pos((scenery_rect.width * 1) / 6, scenery_rect.height * 0.2),
 		k.anchor("center"),
 		k.scale(1),
 	]);
@@ -39,8 +39,8 @@ export function Scenery({ k, ground_height }) {
 			const t = k.time();
 
 			// if cloud goes over the left side; then it should appear from the right side
-			if (cloud.pos.x < -cloud.width / 2) {
-				cloud.pos.x = 600 + cloud.width;
+			if (cloud.pos.x < padding - cloud.width / 2) {
+				cloud.pos.x = k.width() - padding * 2 + cloud.width / 2;
 				return;
 			}
 

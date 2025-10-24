@@ -1,4 +1,4 @@
-export function registerGameOverScene(k) {
+export function registerGameOverScene({ k }) {
 	k.scene("gameover", (score) => {
 		const score_title = k.add([
 			k.text("You Scored", {
@@ -6,7 +6,7 @@ export function registerGameOverScene(k) {
 				align: "center",
 			}),
 			k.anchor("center"),
-			k.pos(k.width() / 2, k.height() / 2),
+			k.pos(k.width() / 2, k.height() / 3),
 			k.color("#000000"),
 		]);
 
@@ -26,7 +26,7 @@ export function registerGameOverScene(k) {
 				align: "center",
 			}),
 			k.anchor("top"),
-			k.pos(k.width() / 2, k.height() / 2 + 18 + 64 + 16),
+			k.pos(k.width() / 2, k.height() / 3 + 18 + 64 + 16),
 			k.color("#ff0000"),
 		]);
 

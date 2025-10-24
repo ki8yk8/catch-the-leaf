@@ -1,7 +1,7 @@
 const PLAYER_INITIAL_SPEED = 1000;
 const ACCElERATION_BASKET = 1200;
 
-export function Basket({ k, ground_height }) {
+export function Basket({ k, ground_height, padding }) {
 	const key_register = {
 		left: null,
 		right: null,
@@ -64,7 +64,11 @@ export function Basket({ k, ground_height }) {
 		const [b_x, b_y] = [k.width(), k.height()]; // boundary
 		const [p_x, p_y] = [basket.pos.x, basket.pos.y]; // basket
 
-		basket.pos.x = k.clamp(p_x, basket.width / 2, b_x - basket.width / 2);
+		basket.pos.x = k.clamp(
+			p_x,
+			basket.width / 2 + padding,
+			b_x - basket.width / 2 - padding
+		);
 	});
 
 	return basket;
