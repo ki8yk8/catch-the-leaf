@@ -37,12 +37,12 @@ export function Hearts({ k, hearts, padding, mode = 0 }) {
 			hearts_container.get("heart").forEach((heart) => {
 				if (heart.sprite === "heart-light") heart.use(k.sprite("heart-dark"));
 			});
-			if (heart_title.color === "#000000") heart_title.color = "#ffffff";
+			heart_title.use(k.color("#ffffff"));
 		} else {
 			hearts_container.get("heart").forEach((heart) => {
 				if (heart.sprite === "heart-dark") heart.use(k.sprite("heart-light"));
 			});
-			if (heart_title.color === "#ffffff") heart_title.color = "#000000";
+			heart_title.use(k.color("#000000"));
 		}
 	});
 
