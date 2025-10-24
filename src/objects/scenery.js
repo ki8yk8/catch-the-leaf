@@ -7,16 +7,17 @@ const COLORS = {
 
 const LEVEL_COLOR = ["morning_sky", "dark_night"];
 
-export function Scenery({ k, ground_height, padding, level = 12 }) {
+export function Scenery({ k, ground_height, padding, mode = 0 }) {
 	const scenery_rect = k.add([
 		k.rect(k.width() - padding * 2, k.height() - ground_height),
-		k.color(COLORS[LEVEL_COLOR[Math.floor(level / 4) % 2]]),
+		k.color(COLORS[LEVEL_COLOR[mode]]),
 		k.pos(padding, 0),
+		{ mode },
 	]);
 
 	// add sun
 	const sun = scenery_rect.add([
-		k.sprite("sun"),
+		k.sprite(mode ? "moon" : "sun"),
 		k.pos((scenery_rect.width * 1) / 6, scenery_rect.height * 0.2),
 		k.anchor("center"),
 		k.scale(1),
@@ -31,10 +32,11 @@ export function Scenery({ k, ground_height, padding, level = 12 }) {
 		[700, 220, 0.4],
 	].forEach((pos) => {
 		const cloud = scenery_rect.add([
-			k.sprite("cloud"),
+			k.sprite(mode ? "cloud-dark" : "cloud-light"),
 			k.pos(pos[0], pos[1]),
 			k.anchor("center"),
 			k.scale(k.clamp(1 - pos[2], 0.6, 1.2)),
+			"cloud",
 		]);
 
 		k.onUpdate(() => {
@@ -60,10 +62,20 @@ export function Scenery({ k, ground_height, padding, level = 12 }) {
 
 	// randomly a buttefly appears mmoving in sine pattern across the screen
 	function spawn_butterfly_randomly() {
-		Butterfly({ k });
+		Butterfly({ k, mode });
 		k.wait(k.rand(5, 30), spawn_butterfly_randomly);
 	}
 	spawn_butterfly_randomly();
+
+	// react on mode change
+	scenery_rect.onUpdate(() => {
+		if (scenery_rect.mode) {
+			if (sun.sprite === "sun") sun.sprite = "moon";
+		}
+		if (!scenery_rect.mode) {
+			if (sun.sprite === "moon") sun.sprite = "sun";
+		}
+	});
 
 	return scenery_rect;
 }

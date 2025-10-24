@@ -1,4 +1,4 @@
-export function Hearts({ k, hearts, padding }) {
+export function Hearts({ k, hearts, padding, mode = 0 }) {
 	const hearts_container = k.add([
 		k.pos(25 + padding, 25),
 		k.anchor("topleft"),
@@ -10,7 +10,7 @@ export function Hearts({ k, hearts, padding }) {
 			size: 32,
 		}),
 		k.pos(0, 0),
-		k.color("#000000"),
+		k.color(mode ? "#ffffff" : "#000000"),
 	]);
 
 	updateHearts(hearts);
@@ -24,7 +24,7 @@ export function Hearts({ k, hearts, padding }) {
 		// adding new hearts
 		for (let i = 0; i <= lifes; i++) {
 			hearts_container.add([
-				k.sprite("heart"),
+				k.sprite(mode ? "heart-dark" : "heart-light"),
 				k.pos(heart_title.width + i * 32, 0),
 				"heart",
 			]);

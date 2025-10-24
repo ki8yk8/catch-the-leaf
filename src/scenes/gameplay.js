@@ -5,7 +5,7 @@ import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
 import { Scenery } from "../objects/scenery";
 
-const LEAF_INTERVAL = 1; // in seconds
+const LEAF_INTERVAL = 2; // in seconds
 const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.1;
@@ -20,14 +20,17 @@ export function registerGameplayScene({ k, padding }) {
 			timer: 3,
 			score: 0,
 			ground_leafs: 0,
-			level: 0,
+			level: 1,
 		};
 
-		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT, padding });
+		let mode = Math.floor(game.level / 4) % 2;
+
+		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT, padding, mode });
 		const ground = Ground({
 			k,
 			ground_height: GROUND_HEIGHT,
 			padding,
+			mode,
 		});
 		const basket = Basket({
 			k,
@@ -35,14 +38,19 @@ export function registerGameplayScene({ k, padding }) {
 			padding,
 		});
 
-		let hearts_container = Hearts({ k, hearts: MAX_GROUND_LEAFS, padding });
+		let hearts_container = Hearts({
+			k,
+			hearts: MAX_GROUND_LEAFS,
+			padding,
+			mode,
+		});
 
 		const score_text = k.add([
 			k.text(`Score: ${game.score}`, {
 				size: 32,
 				align: "center",
 			}),
-			k.color("#000000"),
+			k.color(mode ? "#ffffff" : "#000000"),
 			k.anchor("topright"),
 			k.pos(k.width() - 25 - padding, 25),
 		]);
@@ -58,6 +66,8 @@ export function registerGameplayScene({ k, padding }) {
 		const handle_level_increase = () => {
 			// increase the level word by 1
 			game.level++;
+			let mode = Math.floor(game.level / 4) % 2;
+			scenery.mode = mode;
 
 			// flash the level increased message
 			const level_text = k.add([
@@ -131,7 +141,7 @@ export function registerGameplayScene({ k, padding }) {
 			bomb_spawn_loop = k.loop(
 				BOMB_INTERVAL * (1 - BOMB_SLOPE) ** game.level,
 				() => {
-					Bomb({ k, padding, onHit: handle_bomb_hit });
+					Bomb({ k, padding, onHit: handle_bomb_hit, mode });
 				}
 			);
 		};

@@ -1,6 +1,6 @@
 const GRASS_SIZE = 64;
 
-export function Ground({ k, ground_height, padding }) {
+export function Ground({ k, ground_height, padding, mode = 0 }) {
 	const ground_rect = k.add([
 		k.rect(k.width() - 2 * padding, ground_height),
 		k.pos(padding, k.height() - ground_height),
@@ -18,9 +18,9 @@ export function Ground({ k, ground_height, padding }) {
 	// add some flowers
 	[20, 400].forEach((pos) => {
 		ground_rect.add([
-			k.sprite("flower"),
+			k.sprite(mode ? "flower-dark" : "flower-light"),
 			k.anchor("bot"),
-			k.pos(pos+padding, 0),
+			k.pos(pos + padding, 0),
 			"flower",
 		]);
 	});
@@ -28,9 +28,9 @@ export function Ground({ k, ground_height, padding }) {
 	// add some mushrooms
 	[480].forEach((pos) => {
 		ground_rect.add([
-			k.sprite("mushroom"),
+			k.sprite(mode ? "mushroom-dark" : "mushroom-light"),
 			k.anchor("bot"),
-			k.pos(pos+padding, 0),
+			k.pos(pos + padding, 0),
 			"mushroom",
 		]);
 	});

@@ -15,31 +15,23 @@ const k = kaplay({
 
 k.loadRoot("./");
 
-k.loadSprite("heart", "/sprites/heart.png");
+k.loadSprite("heart-light", "/sprites/heart-light.png");
+k.loadSprite("heart-dark", "/sprites/heart-dark.png");
 k.loadSprite("steel", "/sprites/steel.png");
 k.loadSprite("grass", "/sprites/grass.png");
 k.loadSprite("leaf", "/sprites/leaf.png");
 k.loadSprite("butterfly", "/sprites/btfly.png");
-k.loadSprite("cloud", "/sprites/cloud.png");
-k.loadSprite("flower", "/sprites/flowy.png");
+k.loadSprite("ghost", "/sprites/ghost.png");
+k.loadSprite("cloud-light", "/sprites/cloud-light.png");
+k.loadSprite("cloud-dark", "/sprites/cloud-dark.png");
+k.loadSprite("flower-light", "/sprites/flowy-light.png");
+k.loadSprite("flower-dark", "/sprites/flowy-dark.png");
 k.loadSprite("moon", "/sprites/moon.png");
-k.loadSprite("mushroom", "/sprites/mushroom.png");
+k.loadSprite("mushroom-light", "/sprites/mushroom-light.png");
+k.loadSprite("mushroom-dark", "/sprites/mushroom-dark.png");
 k.loadSprite("sun", "/sprites/sun.png");
-k.loadSprite(
-	"firing",
-	"/sprites/firing.png"
-	// {
-	// sliceX: 2,
-	// anims: {
-	// 	anim: {
-	// 		from: 0,
-	// 		to: 1,
-	// 		loop: true,
-	// 		speed: 6.67,
-	// 	},
-	// },
-	// }
-);
+k.loadSprite("firing-light", "/sprites/firing-light.png");
+k.loadSprite("firing-dark", "/sprites/firing-dark.png");
 
 // loading sound starts here
 k.loadSound("catch", "/sounds/catch.mp3");

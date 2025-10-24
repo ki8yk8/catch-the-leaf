@@ -1,6 +1,6 @@
-export function Bomb({ k, padding, onHit }) {
+export function Bomb({ k, padding, onHit, mode = 0 }) {
 	const bomb = k.add([
-		k.sprite("firing"),
+		k.sprite(mode ? "firing-dark" : "firing-light"),
 		k.pos(k.rand(padding, k.width() - padding - 32), 0),
 		k.anchor("bot"),
 		k.area(),
