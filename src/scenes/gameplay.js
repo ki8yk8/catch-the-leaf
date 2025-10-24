@@ -24,8 +24,16 @@ export function registerGameplayScene({ k, padding }) {
 		};
 
 		let mode = Math.floor(game.level / 4) % 2;
+
 		k.wait(3, () => {
 			mode = 1;
+			scenery.mode = mode;
+			ground.mode = mode;
+			hearts_container.mode = mode;
+			score_text.color = mode ? "#ffffff" : "#000000";
+		});
+		k.wait(6, () => {
+			mode = 0;
 			scenery.mode = mode;
 			ground.mode = mode;
 			hearts_container.mode = mode;
