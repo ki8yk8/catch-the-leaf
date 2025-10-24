@@ -3,6 +3,7 @@ export function Hearts({ k, hearts, padding, mode = 0 }) {
 		k.pos(25 + padding, 25),
 		k.anchor("topleft"),
 		k.fixed(),
+		{ mode },
 	]);
 
 	const heart_title = hearts_container.add([
@@ -30,6 +31,24 @@ export function Hearts({ k, hearts, padding, mode = 0 }) {
 			]);
 		}
 	}
+
+	hearts_container.onUpdate(() => {
+		if (hearts_container.mode) {
+			hearts_container.get("heart").forEach((heart) => {
+				if (heart.sprite === "heart-light") {
+					heart.sprite = "heart-dark";
+				}
+			});
+			if (heart_title.color === "#000000") heart_title.color = "#ffffff";
+		} else {
+			hearts_container.get("heart").forEach((heart) => {
+				if (heart.sprite === "heart-dark") {
+					heart.sprite = "heart-light";
+				}
+			});
+			if (heart_title.color === "#ffffff") heart_title.color = "#000000";
+		}
+	});
 
 	return hearts_container;
 }

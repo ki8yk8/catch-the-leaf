@@ -8,6 +8,7 @@ export function Ground({ k, ground_height, padding, mode = 0 }) {
 		k.area(),
 		k.body({ isStatic: true }),
 		"ground",
+		{ mode },
 	]);
 
 	const total_grasses = Math.ceil((k.width() - 2 * padding) / GRASS_SIZE);
@@ -33,6 +34,34 @@ export function Ground({ k, ground_height, padding, mode = 0 }) {
 			k.pos(pos + padding, 0),
 			"mushroom",
 		]);
+	});
+
+	ground_rect.onUpdate(() => {
+		if (ground_rect.mode) {
+			ground_rect.get("mushroom").forEach((mushroom) => {
+				if (mushroom.sprite === "mushroom-light") {
+					mushroom.sprite = "mushroom-dark";
+				}
+			});
+
+			ground_rect.get("flower").forEach((flower) => {
+				if (flower.sprite === "flower-light") {
+					flower.sprite = "flower-dark";
+				}
+			});
+		} else {
+			ground_rect.get("mushroom").forEach((mushroom) => {
+				if (mushroom.sprite === "mushroom-dark") {
+					mushroom.sprite = "mushroom-light";
+				}
+			});
+
+			ground_rect.get("flower").forEach((flower) => {
+				if (flower.sprite === "flower-dark") {
+					flower.sprite = "flower-light";
+				}
+			});
+		}
 	});
 
 	return ground_rect;

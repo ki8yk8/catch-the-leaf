@@ -1,4 +1,4 @@
-export function Butterfly({ k, mode = 0 }) {
+export function Butterfly({ k, mode }) {
 	const random_ht = k.rand(100, k.height() - 150);
 	const speed = k.rand(40, 90);
 	const flip = Math.random() < 0.5;
@@ -11,6 +11,8 @@ export function Butterfly({ k, mode = 0 }) {
 		k.pos(start_x, random_ht),
 		k.anchor("center"),
 		k.scale(0.8),
+		{mode},
+		"butterfly",
 	]);
 
 	k.onUpdate(() => {

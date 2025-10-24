@@ -71,9 +71,36 @@ export function Scenery({ k, ground_height, padding, mode = 0 }) {
 	scenery_rect.onUpdate(() => {
 		if (scenery_rect.mode) {
 			if (sun.sprite === "sun") sun.sprite = "moon";
-		}
-		if (!scenery_rect.mode) {
+
+			scenery_rect.get("cloud").forEach((cloud) => {
+				if (cloud.sprite === "cloud-light") cloud.sprite = "cloud-dark";
+			});
+
+			scenery_rect
+				.get("butterfly", {
+					recursive: true,
+				})
+				.forEach((butterfly) => {
+					if (butterfly.sprite === "butterfly") butterfly.sprite = "ghost";
+				});
+
+			scenery_rect.color = k.Color.fromHex(COLORS[LEVEL_COLOR[1]]);
+		} else {
 			if (sun.sprite === "moon") sun.sprite = "sun";
+
+			scenery_rect.get("cloud").forEach((cloud) => {
+				if (cloud.sprite === "cloud-dark") cloud.sprite = "cloud-light";
+			});
+
+			scenery_rect
+				.get("butterfly", {
+					recursive: true,
+				})
+				.forEach((butterfly) => {
+					if (butterfly.sprite === "ghost") butterfly.sprite = "butterfly";
+				});
+
+			scenery_rect.color = k.Color.fromHex(COLORS[LEVEL_COLOR[0]]);
 		}
 	});
 

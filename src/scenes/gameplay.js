@@ -10,7 +10,7 @@ const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.1;
 const GROUND_HEIGHT = 64;
-const MAX_GROUND_LEAFS = 5;
+const MAX_GROUND_LEAFS = 50;
 const LEVEL_INCREASE_SCORE = 5;
 const BONUS_LEVEL = 5;
 
@@ -24,6 +24,13 @@ export function registerGameplayScene({ k, padding }) {
 		};
 
 		let mode = Math.floor(game.level / 4) % 2;
+		k.wait(3, () => {
+			mode = 1;
+			scenery.mode = mode;
+			ground.mode = mode;
+			hearts_container.mode = mode;
+			score_text.color = mode ? "#ffffff" : "#000000";
+		});
 
 		const scenery = Scenery({ k, ground_height: GROUND_HEIGHT, padding, mode });
 		const ground = Ground({
@@ -66,8 +73,12 @@ export function registerGameplayScene({ k, padding }) {
 		const handle_level_increase = () => {
 			// increase the level word by 1
 			game.level++;
-			let mode = Math.floor(game.level / 4) % 2;
+
+			mode = Math.floor(game.level / 4) % 2;
 			scenery.mode = mode;
+			ground.mode = mode;
+			hearts_container.mode = mode;
+			score_text.color = mode ? "#ffffff" : "#000000";
 
 			// flash the level increased message
 			const level_text = k.add([
@@ -164,6 +175,7 @@ export function registerGameplayScene({ k, padding }) {
 				k,
 				hearts: MAX_GROUND_LEAFS - game.ground_leafs,
 				padding,
+				mode,
 			});
 		};
 
