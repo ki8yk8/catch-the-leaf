@@ -10,7 +10,7 @@ const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.1;
 const GROUND_HEIGHT = 64;
-const MAX_GROUND_LEAFS = 50;
+const MAX_GROUND_LEAFS = 5;
 const LEVEL_INCREASE_SCORE = 5;
 const BONUS_LEVEL = 5;
 
@@ -55,13 +55,6 @@ export function registerGameplayScene({ k, padding }) {
 			k.pos(k.width() - 25 - padding, 25),
 		]);
 
-		k.wait(3, () => {
-			mode = 1;
-			scenery.mode = mode;
-			ground.mode = mode;
-			hearts_container.mode = mode;
-		});
-
 		const handle_leaf_caught = () => {
 			game.score++;
 			score_text.text = `Score: ${game.score}`;
@@ -78,7 +71,7 @@ export function registerGameplayScene({ k, padding }) {
 			scenery.mode = mode;
 			ground.mode = mode;
 			hearts_container.mode = mode;
-			score_text.color = mode ? "#ffffff" : "#000000";
+			score_text.use(k.color(mode ? "#ffffff" : "#000000"));
 
 			// flash the level increased message
 			const level_text = k.add([
