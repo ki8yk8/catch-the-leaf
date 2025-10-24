@@ -21,22 +21,33 @@ export function spawn_leaf({ k, size = [25, 25], onCatch, onDrop, padding }) {
 		"leaf--falling",
 	]);
 
+	const emitter = k.add([
+		k.pos(k.center()),
+		k.particles(
+			{
+				max: 15,
+				speed: [40, 90],
+				lifeTime: [0.4, 0.8],
+				angle: [260, 280],
+				opacities: [1.0, 0.0],
+				colors: [195, 106, 62],
+				scale: [1, 4],
+			},
+			{ direction: 270, spread: 60 }
+		),
+	]);
+
+	function fireEmitter() {
+		emitter.pos.x = leaf.pos.x + leaf.width / 2;
+		emitter.pos.y = leaf.pos.y + leaf.height;
+		emitter.emit(15);
+	}
+
 	leaf.onCollide("ground", () => {
+		fireEmitter();
+
 		leaf.unuse("leaf--falling");
 		leaf.use("leaf--on-ground");
-
-		leaf.add([
-			k.pos(k.center()),
-			k.particles(
-				{
-					max: 10,
-					speed: [50, 50],
-					lifetime: [1, 2],
-					color: ["#ff0000"],
-				},
-				{ direction: 0, spread: 45 }
-			),
-		]);
 
 		onDrop?.();
 		leaf.vel.x = 0;
