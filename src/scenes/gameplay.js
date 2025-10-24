@@ -8,6 +8,7 @@ const LEAF_INTERVAL = 1; // in seconds
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 const LEVEL_INCREASE_SCORE = 5;
+const LEAF_INTERVAL_SLOPE = 0.1;
 
 export function registerGameplayScene({ k, padding }) {
 	k.scene("gameplay", () => {
@@ -64,6 +65,22 @@ export function registerGameplayScene({ k, padding }) {
 			]);
 
 			k.wait(1, () => k.destroy(level_text));
+
+			// cancels the current spawn loop
+			leaf_spawn_loop.cancel();
+
+			// new loop with increased leaf_interval by LEAF_INTERVAL_SLOPE every level
+			leaf_spawn_loop = k.loop(
+				LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE),
+				() => {
+					spawn_leaf({
+						k,
+						onCatch: handle_leaf_caught,
+						onDrop: handle_leaf_missed,
+						padding,
+					});
+				}
+			);
 		};
 
 		const handle_leaf_missed = () => {
