@@ -129,8 +129,14 @@ export function registerGameplayScene({ k, padding }) {
 			// on level increase start spawning the bombs or increase the bombing frequency
 			if (bomb_spawn_loop) bomb_spawn_loop.cancel();
 			bomb_spawn_loop = k.loop(BOMB_INTERVAL * (1 - BOMB_SLOPE), () => {
-				Bomb({ k, padding });
+				Bomb({ k, padding, onHit: handle_bomb_hit });
 			});
+		};
+
+		// on bomb hit score decreases by 10
+		const handle_bomb_hit = () => {
+			game.score = Math.min(0, game.score - 10);
+			score_text.text = `Score: ${game.score}`;
 		};
 
 		const handle_leaf_missed = () => {
