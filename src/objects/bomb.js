@@ -65,7 +65,11 @@ export function Bomb({ k, padding, onHit }) {
 	}
 
 	bomb.onCollide("ground", extinguishFireball);
-	bomb.onCollide("leaf", extinguishFireball);
+	bomb.onCollide("leaf", (leaf) => {
+		if (leaf.is("leaf--on-ground")) {
+			extinguishFireball();
+		}
+	});
 	bomb.onCollide("basket", () => {
 		extinguishFireball();
 		onHit?.();
