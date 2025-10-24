@@ -135,7 +135,7 @@ export function registerGameplayScene({ k, padding }) {
 
 		// on bomb hit score decreases by 10
 		const handle_bomb_hit = () => {
-			game.score = Math.min(0, game.score - 10);
+			game.score = Math.max(0, game.score - 10);
 			score_text.text = `Score: ${game.score}`;
 		};
 
