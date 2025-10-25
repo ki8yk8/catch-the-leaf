@@ -9,7 +9,7 @@ export function registerStartScene({ k, padding }) {
 
 		const logo = game_screen.add([
 			k.sprite("logo"),
-			k.pos(game_screen.width / 2, 100),
+			k.pos(game_screen.width / 2, 150),
 			k.anchor("center"),
 			k.scale(1),
 			k.rotate(0),
@@ -42,13 +42,13 @@ export function registerStartScene({ k, padding }) {
 			k.text("Use arrow keys and enter to navigate", {
 				size: 22,
 			}),
-			k.pos(game_screen.width / 2, 200 * 1.1 + 32),
+			k.pos(game_screen.width / 2, 220 * 1.1 + 32),
 			k.anchor("top"),
 		]);
 
 		// adding menu items\
 		const start_btn = game_screen.add([
-			k.rect((game_screen.width * 2) / 3, 48+16*2, {
+			k.rect((game_screen.width * 2) / 3, 48 + 16 * 2, {
 				radius: 20,
 			}),
 			k.pos(game_screen.width / 2, hint_title.pos.y + 22 + 32),
@@ -63,7 +63,45 @@ export function registerStartScene({ k, padding }) {
 			}),
 			k.color("#ffffff"),
 			k.anchor("center"),
-			k.pos(0, start_btn.height / 2+4),
+			k.pos(0, start_btn.height / 2 + 4),
+		]);
+
+		const instructions_btn = game_screen.add([
+			k.rect((game_screen.width * 2) / 3, 48 + 16 * 2, {
+				radius: 20,
+			}),
+			k.pos(game_screen.width / 2, start_btn.pos.y + 80 + 8),
+			k.anchor("top"),
+			k.color("#8A2AE0"),
+		]);
+		const instructions_btn_text = instructions_btn.add([
+			k.text("Instructions", {
+				size: 48,
+				font: "atma-bold",
+				align: "center",
+			}),
+			k.color("#ffffff"),
+			k.anchor("center"),
+			k.pos(0, start_btn.height / 2 + 4),
+		]);
+
+		const sound_btn = game_screen.add([
+			k.rect((game_screen.width * 2) / 3, 48 + 16 * 2, {
+				radius: 20,
+			}),
+			k.pos(game_screen.width / 2, instructions_btn.pos.y + 80 + 8),
+			k.anchor("top"),
+			k.color("#8A2AE0"),
+		]);
+		const sound_btn_text = sound_btn.add([
+			k.text("Sound: On", {
+				size: 48,
+				font: "atma-bold",
+				align: "center",
+			}),
+			k.color("#ffffff"),
+			k.anchor("center"),
+			k.pos(0, start_btn.height / 2 + 4),
 		]);
 	});
 }
