@@ -48,6 +48,21 @@ export function registerGameplayScene({ k, padding }) {
 			mode,
 		});
 
+		// logic for magent
+		k.onUpdate(() => {
+			const leaves = k.get("leaf--falling", { recursive: true });
+			const basket = k.get("basket", {recursive: true})[0];
+
+			// for each leaf compute the distance between leaf and basket and move it toward each other
+			leaves.forEach((leaf) => {
+				if (leaf.is("leaf--on-ground")) return;
+
+				const [b, l] = [basket.pos, leaf.pos];
+				const difference = [l.x - b.x, l.y - b.y];
+				leaf.move(difference[0] * 1, difference[1] * 1);
+			});
+		});
+
 		const score_text = k.add([
 			k.text(`Score: ${game.score}`, {
 				size: 32,
