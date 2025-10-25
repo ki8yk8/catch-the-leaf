@@ -28,7 +28,7 @@ export function registerInstructionsScene({ k, padding }) {
 				font: "atma-bold",
 			}),
 			k.anchor("bot"),
-			k.pos(game_screen.width / 2, game_screen.height-100),
+			k.pos(game_screen.width / 2, game_screen.height - 100),
 			k.animate({
 				relative: true,
 			}),
@@ -40,6 +40,6 @@ export function registerInstructionsScene({ k, padding }) {
 			easing: k.easings.easeInBounce,
 		});
 
-		k.onKeyPress(() => k.go("startgame"))
+		k.onKeyPress(() => k.go("startgame"));
 	});
 }

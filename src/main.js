@@ -85,4 +85,4 @@ registerStartScene({ k, padding: GAME_PADDING });
 registerGameOverScene({ k, padding: GAME_PADDING });
 registerInstructionsScene({ k, padding: GAME_PADDING });
 
-k.go("instructions");
+k.go("startgame");
