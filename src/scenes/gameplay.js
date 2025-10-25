@@ -8,16 +8,16 @@ import { Life } from "../objects/life";
 import { spawn_magnet } from "../objects/magnet";
 import { Scenery } from "../objects/scenery";
 
-const LEAF_INTERVAL = 2; // in seconds
+const LEAF_INTERVAL = 1.7; // in seconds
 const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 7;
-const BOMB_SLOPE = 0.02;
+const BOMB_SLOPE = 0.09;
 const HEART_INTERVAL = 13;
 const MAGNET_INTERVAL = 29;
 
 const GROUND_HEIGHT = 64;
-const MAX_GROUND_LEAFS = 5;
-const LEVEL_INCREASE_SCORE = 5;
+const MAX_GROUND_LEAFS = 4;
+const LEVEL_INCREASE_SCORE = 10;
 const BONUS_LEVEL = 5;
 
 export function registerGameplayScene({ k, padding }) {
