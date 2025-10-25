@@ -209,6 +209,7 @@ export function registerGameplayScene({ k, padding }) {
 		k.play("start");
 
 		let leaf_spawn_loop = null;
+		let first_heart = true;
 		const start_timer_loop = k.loop(1, () => {
 			timer_text.text = game.timer.toString();
 			game.timer--;
@@ -227,6 +228,10 @@ export function registerGameplayScene({ k, padding }) {
 				});
 
 				heart_spawn_loop = k.loop(HEART_INTERVAL, () => {
+					if (first_heart) {
+						first_heart = false;
+						return;
+					}
 					life = Life({ k, padding, onCatch: handle_heart_caught });
 				});
 
