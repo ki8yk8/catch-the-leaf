@@ -13,8 +13,8 @@ const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.02;
 const HEART_INTERVAL = 10;
 
-const MAGNET_INTERVAL = 15;
-const MAGNET_LASTS = 5;
+const MAGNET_INTERVAL = 30;
+const MAGNET_LASTS = 10;
 
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
@@ -61,11 +61,24 @@ export function registerGameplayScene({ k, padding }) {
 				k,
 				padding,
 				onCatch: () => {
-					k.debug.log("Starting magnet spawn");
+					const magnet_sound = k.play("whoosh", { loop: true });
 					basket.tag("basket--magnetic");
+
+					const magnet_text = k.add([
+						k.text(`Magnet Active`, {
+							size: 72,
+						}),
+						k.pos(k.width() / 2, k.height() / 3),
+						k.color(k.Color.fromHex("#fed702")),
+						k.anchor("center"),
+					]);
+
+					// remove text before stopping
+					k.wait(MAGNET_LASTS-1.5, () => k.destroy(magnet_text));
+
 					k.wait(MAGNET_LASTS, () => {
 						basket.untag("basket--magnetic");
-						k.debug.log("No magnetic effect");
+						magnet_sound.stop();
 					});
 				},
 			});
@@ -79,7 +92,6 @@ export function registerGameplayScene({ k, padding }) {
 
 			if (basket.length === 0) return;
 			basket = basket[0];
-			console.log(basket);
 			if (!basket.is("basket--magnetic")) return;
 
 			const eatarea = basket.get("eat-area")[0];

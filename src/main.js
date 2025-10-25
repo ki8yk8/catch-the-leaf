@@ -54,6 +54,7 @@ k.loadSound("life", "/sounds/life.mp3");
 k.loadSound("life-increase", "/sounds/life-increase.mp3");
 k.loadSound("break", "/sounds/break.mp3");
 k.loadSound("confetti", "/sounds/confetti.mp3");
+k.loadSound("whoosh", "/sounds/whoosh.mp3");
 
 if (process.env.NODE_ENV === "development") {
 	k.debug.inspect = true;
