@@ -115,6 +115,7 @@ export function registerStartScene({ k, padding }) {
 			// remove outline from previous
 			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
 			btns[active_btn].use(k.z(1));
+			k.play("click");
 			k.tween(1.1, 1, 0.15, (s) => btns[active_btn].use(k.scale(s)));
 			k.wait(0.15, () => {
 				active_btn++;
@@ -130,6 +131,7 @@ export function registerStartScene({ k, padding }) {
 			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
 			btns[active_btn].use(k.z(1));
 			k.tween(1.1, 1, 0.15, (s) => btns[active_btn].use(k.scale(s)));
+			k.play("click");
 			k.wait(0.15, () => {
 				active_btn--;
 				btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
