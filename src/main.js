@@ -2,6 +2,7 @@ import kaplay from "kaplay";
 import { registerGameplayScene } from "./scenes/gameplay";
 import { registerStartScene } from "./scenes/start-game";
 import { registerGameOverScene } from "./scenes/gameover";
+import { registerInstructionsScene } from "./scenes/instructions";
 
 const k = kaplay({
 	canvas: document.getElementById("game"),
@@ -11,7 +12,7 @@ const k = kaplay({
 	scale: 1,
 	stretch: false,
 	global: false,
-	font: "atma-regular"
+	font: "atma-regular",
 });
 
 k.loadRoot("./");
@@ -82,5 +83,6 @@ for (let i = 0; i < total_bricks; i++) {
 registerGameplayScene({ k, padding: GAME_PADDING });
 registerStartScene({ k, padding: GAME_PADDING });
 registerGameOverScene({ k, padding: GAME_PADDING });
+registerInstructionsScene({ k, padding: GAME_PADDING });
 
 k.go("startgame");

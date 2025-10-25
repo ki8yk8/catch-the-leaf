@@ -147,7 +147,7 @@ export function registerStartScene({ k, padding }) {
 			if (active_btn === 0) {
 				k.go("gameplay");
 			} else if (active_btn === 1) {
-				// for instructions
+				k.go("instructions");
 			} else if (active_btn === 2) {
 				sound = !sound;
 				k.volume(sound ? 1 : 0);
