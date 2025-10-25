@@ -54,6 +54,7 @@ export function registerStartScene({ k, padding }) {
 			k.pos(game_screen.width / 2, hint_title.pos.y + 22 + 32),
 			k.anchor("top"),
 			k.color("#8A2AE0"),
+			k.outline(8, k.Color.fromHex("#FED701")),
 		]);
 		const start_btn_text = start_btn.add([
 			k.text("Start Game", {
@@ -103,5 +104,24 @@ export function registerStartScene({ k, padding }) {
 			k.anchor("center"),
 			k.pos(0, start_btn.height / 2 + 4),
 		]);
+
+		const btns = [start_btn, instructions_btn, sound_btn];
+		let active_btn = 0;
+		k.onKeyPress("down", () => {
+			if (active_btn >= btns.length - 1) return;
+
+			// remove outline from previous
+			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
+			active_btn++;
+			btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
+		});
+		k.onKeyPress("up", () => {
+			if (active_btn === 0) return;
+
+			// remove outline from previous
+			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
+			active_btn--;
+			btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
+		});
 	});
 }
