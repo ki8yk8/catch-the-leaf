@@ -88,6 +88,8 @@ export function registerStartScene({ k, padding }) {
 			k.pos(0, start_btn.height / 2 + 4),
 		]);
 
+		let sound = true;
+		k.volume(sound ? 1 : 0);
 		const sound_btn = game_screen.add([
 			k.rect((game_screen.width * 2) / 3, 48 + 16 * 2, {
 				radius: 20,
@@ -97,7 +99,7 @@ export function registerStartScene({ k, padding }) {
 			k.color("#8A2AE0"),
 		]);
 		const sound_btn_text = sound_btn.add([
-			k.text("Sound: On", {
+			k.text(`Sound: ${sound ? "On" : "Off"}`, {
 				size: 48,
 				font: "atma-bold",
 				align: "center",
@@ -138,6 +140,25 @@ export function registerStartScene({ k, padding }) {
 				k.tween(1, 1.1, 0.25, (s) => btns[active_btn].use(k.scale(s)));
 				btns[active_btn].use(k.z(10));
 			});
+		});
+
+		// what happens when enter is clicked on top of button
+		k.onKeyPress("enter", () => {
+			if (active_btn === 0) {
+				k.go("gameplay");
+			} else if (active_btn === 1) {
+				// for instructions
+			} else if (active_btn === 2) {
+				sound = !sound;
+				k.volume(sound ? 1 : 0);
+				sound_btn_text.use(
+					k.text(`Sound: ${sound ? "On" : "Off"}`, {
+						size: 48,
+						font: "atma-bold",
+						align: "center",
+					})
+				);
+			}
 		});
 	});
 }
