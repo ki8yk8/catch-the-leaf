@@ -1,5 +1,10 @@
 export function registerStartScene({ k, padding }) {
 	k.scene("startgame", () => {
+		const bg_music = k.play("music", {
+			loop: true,
+			volume: 0.8
+		});
+
 		const game_screen = k.add([
 			k.rect(k.width() - 2 * padding, k.height()),
 			k.anchor("topleft"),
@@ -145,6 +150,7 @@ export function registerStartScene({ k, padding }) {
 		// what happens when enter is clicked on top of button
 		k.onKeyPress("enter", () => {
 			if (active_btn === 0) {
+				bg_music.stop();
 				k.go("gameplay");
 			} else if (active_btn === 1) {
 				k.go("instructions");

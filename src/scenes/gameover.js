@@ -2,7 +2,11 @@ export function registerGameOverScene({ k, padding }) {
 	k.scene("gameover", (score) => {
 		// play the failed sound
 		k.play("gameover");
-		
+		let bg_music = null;
+		k.wait(1, () => {
+			bg_music = k.play("music");
+		});
+
 		const game_screen = k.add([
 			k.rect(k.width() - 2 * padding, k.height()),
 			k.anchor("topleft"),
@@ -30,7 +34,7 @@ export function registerGameOverScene({ k, padding }) {
 			k.pos(game_screen.width / 2, score_title.pos.y + 32),
 			k.color("#ffffff"),
 		]);
-		
+
 		const hint_text = game_screen.add([
 			k.text("Press any key to go back...", {
 				font: "atma-bold",
@@ -48,7 +52,9 @@ export function registerGameOverScene({ k, padding }) {
 			easing: k.easings.easeInBounce,
 		});
 
-		k.onKeyPress(() => k.go("startgame"));
-
+		k.onKeyPress(() => {
+			if (bg_music) bg_music.stop();
+			k.go("startgame");
+		});
 	});
 }
