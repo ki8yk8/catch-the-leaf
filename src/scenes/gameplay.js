@@ -74,7 +74,7 @@ export function registerGameplayScene({ k, padding }) {
 					]);
 
 					// remove text before stopping
-					k.wait(MAGNET_LASTS-1.5, () => k.destroy(magnet_text));
+					k.wait(MAGNET_LASTS - 1.5, () => k.destroy(magnet_text));
 
 					k.wait(MAGNET_LASTS, () => {
 						basket.untag("basket--magnetic");
@@ -139,7 +139,7 @@ export function registerGameplayScene({ k, padding }) {
 
 		let bomb_spawn_loop = null;
 		let first_bomb = false;
-		let heart_spawn_loop = null;
+		let just_spawned = false;
 		let life = null;
 		const handle_level_increase = () => {
 			// increase the level word by 1
@@ -189,7 +189,7 @@ export function registerGameplayScene({ k, padding }) {
 				});
 
 				// after all bonus leafs are spawned then drop the regular leafs
-				k.wait(0.5 * LEVEL_INCREASE_SCORE, () => {
+				k.wait(0.5 * (LEVEL_INCREASE_SCORE + 2), () => {
 					leaf_spawn_loop = k.loop(
 						LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level,
 						() => {
@@ -205,19 +205,6 @@ export function registerGameplayScene({ k, padding }) {
 				return;
 			}
 
-			// new loop with increased leaf_interval by LEAF_INTERVAL_SLOPE every level
-			leaf_spawn_loop = k.loop(
-				LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level,
-				() => {
-					spawn_leaf({
-						k,
-						onCatch: handle_leaf_caught,
-						onDrop: handle_leaf_missed,
-						padding,
-					});
-				}
-			);
-
 			// on level increase start spawning the bombs or increase the bombing frequency
 			if (bomb_spawn_loop) bomb_spawn_loop.cancel();
 			first_bomb = true;
@@ -230,13 +217,29 @@ export function registerGameplayScene({ k, padding }) {
 						return;
 					}
 					Bomb({ k, padding, onHit: handle_bomb_hit, mode });
+					just_spawned = true;
+					k.wait(1.5, () => (just_spawned = false));
 				}
 			);
+
+			// new loop with increased leaf_interval by LEAF_INTERVAL_SLOPE every level
+			leaf_spawn_loop = k.wait(just_spawned ? 2 : 0, () => {
+				k.loop(LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level, () => {
+					spawn_leaf({
+						k,
+						onCatch: handle_leaf_caught,
+						onDrop: handle_leaf_missed,
+						padding,
+					});
+				});
+			});
 
 			// after level 2 start spawning the magnet
 			if (game.level === 2) {
 				k.loop(MAGNET_INTERVAL, () => {
 					spawn_magnet();
+					just_spawned = true;
+					k.wait(1.5, () => (just_spawned = false));
 				});
 			}
 		};
@@ -305,12 +308,14 @@ export function registerGameplayScene({ k, padding }) {
 					});
 				});
 
-				heart_spawn_loop = k.loop(HEART_INTERVAL, () => {
+				k.loop(HEART_INTERVAL, () => {
 					if (first_heart) {
 						first_heart = false;
 						return;
 					}
 					life = Life({ k, padding, onCatch: handle_heart_caught });
+					just_spawned = true;
+					k.wait(2, () => (just_spawned = false));
 				});
 
 				start_timer_loop.cancel();
