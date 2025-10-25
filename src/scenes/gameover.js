@@ -1,3 +1,5 @@
+import { Confetti } from "../objects/confetti";
+
 const LEAF_SIZE = 64;
 const LEAF_GAP = 32;
 
@@ -84,6 +86,27 @@ export function registerGameOverScene({ k, padding }) {
 			k.pos(game_screen.width / 2, score_title.pos.y + 32),
 			k.color("#ffffff"),
 		]);
+		// adding confettis
+		const left_confetti = Confetti({
+			k,
+			rotate: false,
+			pos: [k.width() / 2 - 100, score_text.pos.y + 80],
+		});
+		const right_confetti = Confetti({
+			k,
+			rotate: true,
+			pos: [k.width() / 2 + 100, score_text.pos.y + 80],
+		});
+
+		k.wait(0.6, () => {
+			left_confetti.emit(100);
+			k.play("confetti");
+
+			k.wait(0.2, () => {
+				k.play("confetti");
+				right_confetti.emit(100);
+			});
+		});
 
 		const hint_text = game_screen.add([
 			k.text("Press any key to go back...", {
