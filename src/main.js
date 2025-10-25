@@ -38,6 +38,7 @@ k.loadSprite("sun", "/sprites/sun.png");
 k.loadSprite("firing-light", "/sprites/firing-light.png");
 k.loadSprite("firing-dark", "/sprites/firing-dark.png");
 k.loadSprite("logo", "/sprites/logo.png");
+k.loadSprite("magnet", "/sprites/magnet.png");
 
 // loading sound starts here
 k.loadSound("catch", "/sounds/catch.mp3");

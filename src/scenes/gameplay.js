@@ -4,6 +4,7 @@ import { Ground } from "../objects/ground";
 import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
 import { Life } from "../objects/life";
+import { Magnet } from "../objects/magnet";
 import { Scenery } from "../objects/scenery";
 
 const LEAF_INTERVAL = 2; // in seconds
@@ -11,6 +12,9 @@ const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.02;
 const HEART_INTERVAL = 10;
+
+const MAGNET_INTERVAL = 15;
+const MAGNET_LASTS = 5;
 
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
@@ -49,10 +53,35 @@ export function registerGameplayScene({ k, padding }) {
 		});
 
 		// logic for magent
+		let magnet_spawned = false;
+		function spawn_magnet() {
+			if (magnet_spawned) return;
+
+			Magnet({
+				k,
+				padding,
+				onCatch: () => {
+					k.debug.log("Starting magnet spawn");
+					basket.tag("basket--magnetic");
+					k.wait(MAGNET_LASTS, () => {
+						basket.untag("basket--magnetic");
+						k.debug.log("No magnetic effect");
+					});
+				},
+			});
+			magnet_spawned = true;
+		}
+
 		let rect = null;
 		k.onUpdate(() => {
 			const leaves = k.get("leaf--falling", { recursive: true });
-			const basket = k.get("basket")[0];
+			let basket = k.get("basket--magnetic");
+
+			if (basket.length === 0) return;
+			basket = basket[0];
+			console.log(basket);
+			if (!basket.is("basket--magnetic")) return;
+
 			const eatarea = basket.get("eat-area")[0];
 
 			if (rect) k.destroy(rect);
@@ -161,7 +190,6 @@ export function registerGameplayScene({ k, padding }) {
 						}
 					);
 				});
-
 				return;
 			}
 
@@ -192,6 +220,13 @@ export function registerGameplayScene({ k, padding }) {
 					Bomb({ k, padding, onHit: handle_bomb_hit, mode });
 				}
 			);
+
+			// after level 2 start spawning the magnet
+			if (game.level === 2) {
+				k.loop(MAGNET_INTERVAL, () => {
+					spawn_magnet();
+				});
+			}
 		};
 
 		// on bomb hit score decreases by 10
