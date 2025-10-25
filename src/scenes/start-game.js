@@ -1,8 +1,11 @@
+const LEAF_SIZE = 64;
+const LEAF_GAP = 32;
+
 export function registerStartScene({ k, padding }) {
 	k.scene("startgame", () => {
 		const bg_music = k.play("music", {
 			loop: true,
-			volume: 0.8
+			volume: 0.8,
 		});
 
 		const game_screen = k.add([
@@ -11,6 +14,53 @@ export function registerStartScene({ k, padding }) {
 			k.pos(padding, 0),
 			k.color("#86DB3C"),
 		]);
+
+		// drawing moving cells of leaf
+		const n_horizontal_leaf = Math.ceil(game_screen.width / LEAF_SIZE);
+		const n_vertical_leaf = Math.ceil(game_screen.height / LEAF_SIZE);
+		// spawning those leafs
+		for (let i = 0; i < n_vertical_leaf; i++) {
+			for (let j = 0; j < n_horizontal_leaf; j++) {
+				const bgleaf = game_screen.add([
+					k.sprite("leaf"),
+					k.pos(
+						i * LEAF_SIZE + i * LEAF_GAP + LEAF_SIZE / 2,
+						j * LEAF_SIZE + j * LEAF_GAP + LEAF_SIZE / 2
+					),
+					"bgleaf",
+					k.z(-1),
+					k.scale(1),
+					k.rotate(0),
+					k.animate({ relative: true }),
+					k.anchor("center"),
+				]);
+
+				bgleaf.animate("scale", [k.vec2(1), k.vec2(1.5), k.vec2(1)], {
+					duration: 2,
+					easing: k.easings.easeInOutQuad,
+				});
+
+				bgleaf.animate("angle", [k.rand(0, 45), k.rand(-45, 0)], {
+					direction: "ping-pong",
+					duration: 1.25,
+					easing: k.easings.easeInOutQuad,
+				});
+
+				bgleaf.animate(
+					"pos",
+					[
+						k.vec2(k.rand(-10, 10), k.rand(-10, 10)),
+						k.vec2(0, 0),
+						k.vec2(k.rand(-10, 10), k.rand(-10, 10)),
+					],
+					{
+						duration: 1.5,
+						direction: "ping-pong",
+						easing: k.easings.easeInOutQuad,
+					}
+				);
+			}
+		}
 
 		const logo = game_screen.add([
 			k.sprite("logo"),
