@@ -109,7 +109,7 @@ export function registerGameOverScene({ k, padding }) {
 		});
 
 		const hint_text = game_screen.add([
-			k.text("Press any key to go back...", {
+			k.text("Press space to go back...", {
 				font: "atma-bold",
 			}),
 			k.anchor("bot"),
@@ -125,7 +125,7 @@ export function registerGameOverScene({ k, padding }) {
 			easing: k.easings.easeInBounce,
 		});
 
-		k.onKeyPress(() => {
+		k.onKeyPress("space", () => {
 			if (bg_music) bg_music.stop();
 			k.go("startgame");
 		});
