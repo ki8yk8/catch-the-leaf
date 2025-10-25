@@ -49,6 +49,8 @@ k.loadSound("level", "/sounds/level.mp3");
 k.loadSound("fireball-impact", "/sounds/fireball-impact.mp3");
 k.loadSound("fireball", "/sounds/fireball-incoming.mp3");
 k.loadSound("music", "/sounds/music.mp3");
+k.loadSound("life", "/sounds/life.mp3");
+k.loadSound("life-increase", "/sounds/life-increase.mp3");
 
 if (process.env.NODE_ENV === "development") {
 	k.debug.inspect = true;

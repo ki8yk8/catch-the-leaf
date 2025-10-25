@@ -3,12 +3,14 @@ import { Bomb } from "../objects/bomb";
 import { Ground } from "../objects/ground";
 import { Hearts } from "../objects/hearts";
 import { spawn_leaf } from "../objects/leaf";
+import { Life } from "../objects/life";
 import { Scenery } from "../objects/scenery";
 
 const LEAF_INTERVAL = 2; // in seconds
 const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.02;
+const HEART_INTERVAL = 1;
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 const LEVEL_INCREASE_SCORE = 5;
@@ -64,6 +66,7 @@ export function registerGameplayScene({ k, padding }) {
 
 		let bomb_spawn_loop = null;
 		let first_bomb = false;
+		let heart_spawn_loop = null;
 		const handle_level_increase = () => {
 			// increase the level word by 1
 			game.level++;
@@ -206,6 +209,10 @@ export function registerGameplayScene({ k, padding }) {
 						onDrop: handle_leaf_missed,
 						padding,
 					});
+				});
+
+				heart_spawn_loop = k.loop(HEART_INTERVAL, () => {
+					Life({ k, padding });
 				});
 
 				start_timer_loop.cancel();
