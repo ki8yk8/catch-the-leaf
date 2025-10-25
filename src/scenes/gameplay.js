@@ -77,10 +77,10 @@ export function registerGameplayScene({ k, padding }) {
 			// flash the level increased message
 			const level_text = k.add([
 				k.text(`Level ${game.level}`, {
-					size: 64,
+					size: 72,
 				}),
 				k.pos(k.width() / 2, k.height() / 3),
-				k.color(255, 255, 255),
+				k.color(k.Color.fromHex("#01FE09")),
 				k.anchor("center"),
 			]);
 			// play sound
@@ -181,11 +181,11 @@ export function registerGameplayScene({ k, padding }) {
 
 		const timer_text = k.add([
 			k.text(`3`, {
-				size: 64,
+				size: 72,
 				align: "center",
 			}),
 			k.pos(k.width() / 2, (k.height() * 1) / 3),
-			k.color("#ffffff"),
+			k.color("#FED701"),
 			k.anchor("center"),
 		]);
 		k.play("start");
