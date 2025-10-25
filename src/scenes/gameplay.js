@@ -10,11 +10,10 @@ import { Scenery } from "../objects/scenery";
 
 const LEAF_INTERVAL = 2; // in seconds
 const LEAF_INTERVAL_SLOPE = 0.1;
-const BOMB_INTERVAL = 5;
+const BOMB_INTERVAL = 7;
 const BOMB_SLOPE = 0.02;
-const HEART_INTERVAL = 10;
-
-const MAGNET_INTERVAL = 30;
+const HEART_INTERVAL = 13;
+const MAGNET_INTERVAL = 29;
 
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
@@ -23,15 +22,6 @@ const BONUS_LEVEL = 5;
 
 export function registerGameplayScene({ k, padding }) {
 	k.scene("gameplay", () => {
-		// counter for handling times of spawn;
-		// if this time has exceeded then spawning is neede
-		let next_times = {
-			leaf: LEAF_INTERVAL + k.time(),
-			bomb: BOMB_INTERVAL + k.time(),
-			heart: HEART_INTERVAL + k.time(),
-			magnet: MAGNET_INTERVAL + k.time(),
-		};
-
 		const game = {
 			timer: 3,
 			score: 0,
@@ -114,10 +104,6 @@ export function registerGameplayScene({ k, padding }) {
 			});
 		};
 
-		let bomb_spawn_loop = null;
-		let first_bomb = false;
-		let just_spawned = false;
-		let life = null;
 		const handle_level_increase = () => {
 			// increase the level word by 1
 			game.level++;
@@ -126,16 +112,14 @@ export function registerGameplayScene({ k, padding }) {
 			scenery.mode = mode;
 			ground.mode = mode;
 			hearts_container.mode = mode;
-			if (life) life.mode = mode;
 			score_text.use(k.color(mode ? "#ffffff" : "#000000"));
 
 			LevelIncrease({ k, level: game.level });
-			// cancels the current spawn loop
-			leaf_spawn_loop.cancel();
 
 			// if this is BONUS level then, the number of leafs to increment the user to next level should appear linearly
 			if (game.level % BONUS_LEVEL === 0) {
 				const random_x = k.rand(padding, k.width() - 38 - padding);
+				next_times.leaf = k.time() + 0.5 * LEVEL_INCREASE_SCORE + 1;
 
 				let i = 0;
 				const bonus_loop = k.loop(0.5, () => {
@@ -152,64 +136,7 @@ export function registerGameplayScene({ k, padding }) {
 					}
 				});
 
-				// after all bonus leafs are spawned then drop the regular leafs
-				k.wait(0.5 * (LEVEL_INCREASE_SCORE + 2), () => {
-					leaf_spawn_loop = k.loop(
-						LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level,
-						() => {
-							if (!just_spawned) {
-								spawn_leaf({
-									k,
-									onCatch: handle_leaf_caught,
-									onDrop: handle_leaf_missed,
-									padding,
-								});
-							}
-						}
-					);
-				});
 				return;
-			}
-
-			// on level increase start spawning the bombs or increase the bombing frequency
-			if (bomb_spawn_loop) bomb_spawn_loop.cancel();
-			first_bomb = true;
-			bomb_spawn_loop = k.loop(
-				BOMB_INTERVAL * (1 - BOMB_SLOPE) ** game.level,
-				() => {
-					if (first_bomb) {
-						// skip this bomb
-						first_bomb = false;
-						return;
-					}
-					Bomb({ k, padding, onHit: handle_bomb_hit, mode });
-					just_spawned = true;
-					k.wait(1, () => (just_spawned = false));
-				}
-			);
-
-			// new loop with increased leaf_interval by LEAF_INTERVAL_SLOPE every level
-			leaf_spawn_loop = k.loop(
-				LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level,
-				() => {
-					if (!just_spawned) {
-						spawn_leaf({
-							k,
-							onCatch: handle_leaf_caught,
-							onDrop: handle_leaf_missed,
-							padding,
-						});
-					}
-				}
-			);
-
-			// after level 2 start spawning the magnet
-			if (game.level === 2) {
-				k.loop(MAGNET_INTERVAL, () => {
-					spawn_magnet({ k, basket, padding });
-					just_spawned = true;
-					k.wait(1.5, () => (just_spawned = false));
-				});
 			}
 		};
 
@@ -224,8 +151,6 @@ export function registerGameplayScene({ k, padding }) {
 		]);
 		k.play("start");
 
-		let leaf_spawn_loop = null;
-		let first_heart = true;
 		const start_timer_loop = k.loop(1, () => {
 			timer_text.text = game.timer.toString();
 			game.timer--;
@@ -233,28 +158,62 @@ export function registerGameplayScene({ k, padding }) {
 			if (game.timer === -1) {
 				timer_text.text = "START...";
 			} else if (game.timer === -2) {
-				// spawn a leaf every 2 seconds
-				leaf_spawn_loop = k.loop(LEAF_INTERVAL, () => {
-					spawn_leaf({
-						k,
-						onCatch: handle_leaf_caught,
-						onDrop: handle_leaf_missed,
-						padding,
-					});
-				});
-
-				k.loop(HEART_INTERVAL, () => {
-					if (first_heart) {
-						first_heart = false;
-						return;
-					}
-					life = Life({ k, padding, onCatch: handle_heart_caught });
-					just_spawned = true;
-					k.wait(20, () => (just_spawned = false));
-				});
-
 				start_timer_loop.cancel();
 				k.destroy(timer_text);
+			}
+		});
+
+		// counter for handling times of spawn;
+		// if this time has exceeded then spawning is neede
+		// three stands for the countdown we will be having
+		const next_times = {
+			leaf: LEAF_INTERVAL + 3 + k.time(),
+			bomb: BOMB_INTERVAL + 3 + k.time(),
+			heart: HEART_INTERVAL + 3 + k.time(),
+			magnet: MAGNET_INTERVAL + 3 + k.time(),
+		};
+
+		// spawnning logic starts here
+		k.onUpdate(() => {
+			const now = k.time();
+
+			if (now >= next_times.leaf) {
+				spawn_leaf({
+					k,
+					onCatch: handle_leaf_caught,
+					onDrop: handle_leaf_missed,
+					padding,
+				});
+				next_times.leaf =
+					now + LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level;
+
+				// if the next turn is heart then, check if there is a gap of at least 1 second
+				// if yes, do nothing
+				// else, increase the gap and increase the leaf interval too.
+				if (next_times.heart - now < 1) {
+					next_times.heart = now + 1;
+					next_times.leaf = next_times.leaf + LEAF_INTERVAL;
+				}
+			}
+
+			if (now >= next_times.bomb) {
+				// spawn the bomb and increase bomb timer plus increase next leaf time
+				Bomb({ k, padding, onHit: handle_bomb_hit, mode });
+				next_times.bomb = now + BOMB_INTERVAL * (1 - BOMB_SLOPE) ** game.level;
+				next_times.leaf = now + LEAF_INTERVAL;
+			}
+
+			if (now >= next_times.heart) {
+				Life({ k, padding, onCatch: handle_heart_caught });
+				next_times.heart = now + HEART_INTERVAL;
+				next_times.leaf = now + LEAF_INTERVAL;
+			}
+
+			// if its time and user has crossed the first level then start spawning the magnets
+			if (now >= next_times.magnet) {
+				spawn_magnet({ k, basket, padding });
+				next_times.magnet = now + MAGNET_INTERVAL;
+				next_times.leaf = now + LEAF_INTERVAL;
 			}
 		});
 	});
