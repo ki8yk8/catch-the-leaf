@@ -66,7 +66,15 @@ export function registerGameplayScene({ k, padding }) {
 
 				const l = [leaf.pos.x, leaf.pos.y];
 				const d = [l[0] - p[0], l[1] - p[1]];
-				leaf.move(d[0] * -1, d[1] * -1);
+				const dist = Math.sqrt(d[0] * d[0] + d[1] * d[1]);
+
+				// closer means less attract fatrhet means more
+				const magenetic_strength = k.map(dist, 0, 600, 0.4, 2.0);
+
+				leaf.move(
+					d[0] * -1 * magenetic_strength,
+					d[1] * -1 * magenetic_strength
+				);
 			});
 		});
 
