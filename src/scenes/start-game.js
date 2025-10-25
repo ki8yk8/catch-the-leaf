@@ -55,6 +55,8 @@ export function registerStartScene({ k, padding }) {
 			k.anchor("top"),
 			k.color("#8A2AE0"),
 			k.outline(8, k.Color.fromHex("#FED701")),
+			k.scale(1.1),
+			k.z(10),
 		]);
 		const start_btn_text = start_btn.add([
 			k.text("Start Game", {
@@ -112,16 +114,28 @@ export function registerStartScene({ k, padding }) {
 
 			// remove outline from previous
 			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
-			active_btn++;
-			btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
+			btns[active_btn].use(k.z(1));
+			k.tween(1.1, 1, 0.15, (s) => btns[active_btn].use(k.scale(s)));
+			k.wait(0.15, () => {
+				active_btn++;
+				btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
+				k.tween(1, 1.1, 0.25, (s) => btns[active_btn].use(k.scale(s)));
+				btns[active_btn].use(k.z(10));
+			});
 		});
 		k.onKeyPress("up", () => {
 			if (active_btn === 0) return;
 
 			// remove outline from previous
 			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
-			active_btn--;
-			btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
+			btns[active_btn].use(k.z(1));
+			k.tween(1.1, 1, 0.15, (s) => btns[active_btn].use(k.scale(s)));
+			k.wait(0.15, () => {
+				active_btn--;
+				btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
+				k.tween(1, 1.1, 0.25, (s) => btns[active_btn].use(k.scale(s)));
+				btns[active_btn].use(k.z(10));
+			});
 		});
 	});
 }
