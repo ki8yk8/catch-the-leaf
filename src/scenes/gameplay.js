@@ -49,18 +49,25 @@ export function registerGameplayScene({ k, padding }) {
 		});
 
 		// logic for magent
-		k.onUpdate(() => {
+		let rect = null;
+		k.loop(1, () => {
 			const leaves = k.get("leaf--falling", { recursive: true });
-			const basket = k.get("basket", {recursive: true})[0];
+			const basket = k.get("basket")[0];
+			const eatarea = basket.get("eat-area")[0];
 
+			if (rect) k.destroy(rect);
+
+			const [b, e] = [basket.pos, eatarea.pos];
+			const p = [b.x-e.x, b.y+e.y];
+			rect = k.add([k.rect(10, 10), k.pos(p[0], p[1]), k.anchor("center")]);
 			// for each leaf compute the distance between leaf and basket and move it toward each other
-			leaves.forEach((leaf) => {
-				if (leaf.is("leaf--on-ground")) return;
+			// leaves.forEach((leaf) => {
+			// 	if (leaf.is("leaf--on-ground")) return;
 
-				const [b, l] = [basket.pos, leaf.pos];
-				const difference = [l.x - b.x, l.y - b.y];
-				leaf.move(difference[0] * 1, difference[1] * 1);
-			});
+			// 	const [b, l] = [basket.pos, leaf.pos];
+			// 	const difference = [l.x - b.x, l.y - b.y];
+			// 	leaf.move(difference[0] * 1, difference[1] * 1);
+			// });
 		});
 
 		const score_text = k.add([
