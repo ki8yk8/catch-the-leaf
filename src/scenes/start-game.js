@@ -1,27 +1,40 @@
 export function registerStartScene({ k, padding }) {
 	k.scene("startgame", () => {
-		const title_text = k.add([
-			k.text("Catch the Leaf", {
-				size: 32,
-				align: "center",
-			}),
-			k.color("#000000"),
-			k.pos(k.width() / 2, k.height() / 3),
-			k.anchor("center"),
+		const game_screen = k.add([
+			k.rect(k.width() - 2 * padding, k.height()),
+			k.anchor("topleft"),
+			k.pos(padding, 0),
+			k.color("#86DB3C"),
 		]);
 
-		const start_text = k.add([
-			k.text("Press any key to start the game", {
-				size: 18,
-				align: "center",
-			}),
-			k.pos(k.width() / 2, k.height() / 3 + title_text.height),
+		const logo = game_screen.add([
+			k.sprite("logo"),
+			k.pos(game_screen.width / 2, 100),
 			k.anchor("center"),
-			k.color("#ff0000"),
+			k.scale(1),
+			k.rotate(0),
+			k.animate({ relative: true }),
 		]);
 
-		k.onKeyPress("space", () => {
-			k.go("gameplay");
+		// animating the logo
+		// a hint of scaling
+		logo.animate("scale", [k.vec2(1), k.vec2(1.1), k.vec2(1)], {
+			duration: 3,
+			easing: k.easings.easeInOutQuad,
+		});
+
+		// a pinch of rotation
+		logo.animate("angle", [4, -4], {
+			direction: "ping-pong",
+			duration: 1.5,
+			easing: k.easings.easeInOutQuad,
+		});
+
+		// and some wooble in y axis
+		logo.animate("pos", [k.vec2(-10, 10), k.vec2(0, 0), k.vec2(10, 10)], {
+			duration: 1.5,
+			direction: "ping-pong",
+			easing: k.easings.easeInOutQuad,
 		});
 	});
 }

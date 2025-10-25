@@ -32,6 +32,7 @@ k.loadSprite("mushroom-dark", "/sprites/mushroom-dark.png");
 k.loadSprite("sun", "/sprites/sun.png");
 k.loadSprite("firing-light", "/sprites/firing-light.png");
 k.loadSprite("firing-dark", "/sprites/firing-dark.png");
+k.loadSprite("logo", "/sprites/logo.png");
 
 // loading sound starts here
 k.loadSound("catch", "/sounds/catch.mp3");
