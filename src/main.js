@@ -11,9 +11,13 @@ const k = kaplay({
 	scale: 1,
 	stretch: false,
 	global: false,
+	font: "atma-regular"
 });
 
 k.loadRoot("./");
+
+k.loadFont("atma-bold", "/fonts/atma-bold.ttf");
+k.loadFont("atma-regular", "/fonts/atma-regular.ttf");
 
 k.loadSprite("heart-light", "/sprites/heart-light.png");
 k.loadSprite("heart-dark", "/sprites/heart-dark.png");

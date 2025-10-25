@@ -36,5 +36,34 @@ export function registerStartScene({ k, padding }) {
 			direction: "ping-pong",
 			easing: k.easings.easeInOutQuad,
 		});
+
+		// add the main menu things
+		const hint_title = game_screen.add([
+			k.text("Use arrow keys and enter to navigate", {
+				size: 22,
+			}),
+			k.pos(game_screen.width / 2, 200 * 1.1 + 32),
+			k.anchor("top"),
+		]);
+
+		// adding menu items\
+		const start_btn = game_screen.add([
+			k.rect((game_screen.width * 2) / 3, 48+16*2, {
+				radius: 20,
+			}),
+			k.pos(game_screen.width / 2, hint_title.pos.y + 22 + 32),
+			k.anchor("top"),
+			k.color("#8A2AE0"),
+		]);
+		const start_btn_text = start_btn.add([
+			k.text("Start Game", {
+				size: 48,
+				font: "atma-bold",
+				align: "center",
+			}),
+			k.color("#ffffff"),
+			k.anchor("center"),
+			k.pos(0, start_btn.height / 2+4),
+		]);
 	});
 }
