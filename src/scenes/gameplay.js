@@ -10,7 +10,7 @@ const LEAF_INTERVAL = 2; // in seconds
 const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 5;
 const BOMB_SLOPE = 0.02;
-const HEART_INTERVAL = 1;
+const HEART_INTERVAL = 10;
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 5;
 const LEVEL_INCREASE_SCORE = 5;
@@ -55,6 +55,7 @@ export function registerGameplayScene({ k, padding }) {
 			k.color(mode ? "#ffffff" : "#000000"),
 			k.anchor("topright"),
 			k.pos(k.width() - 25 - padding, 25),
+			k.z(1),
 		]);
 
 		const handle_leaf_caught = () => {
@@ -67,6 +68,7 @@ export function registerGameplayScene({ k, padding }) {
 		let bomb_spawn_loop = null;
 		let first_bomb = false;
 		let heart_spawn_loop = null;
+		let life = null;
 		const handle_level_increase = () => {
 			// increase the level word by 1
 			game.level++;
@@ -75,6 +77,7 @@ export function registerGameplayScene({ k, padding }) {
 			scenery.mode = mode;
 			ground.mode = mode;
 			hearts_container.mode = mode;
+			if (life) life.mode = mode;
 			score_text.use(k.color(mode ? "#ffffff" : "#000000"));
 
 			// flash the level increased message
@@ -182,6 +185,18 @@ export function registerGameplayScene({ k, padding }) {
 			});
 		};
 
+		const handle_heart_caught = () => {
+			game.ground_leafs--;
+			k.destroy(hearts_container);
+
+			hearts_container = Hearts({
+				k,
+				hearts: MAX_GROUND_LEAFS - game.ground_leafs,
+				padding,
+				mode,
+			});
+		};
+
 		const timer_text = k.add([
 			k.text(`3`, {
 				size: 72,
@@ -212,7 +227,7 @@ export function registerGameplayScene({ k, padding }) {
 				});
 
 				heart_spawn_loop = k.loop(HEART_INTERVAL, () => {
-					Life({ k, padding });
+					life = Life({ k, padding, onCatch: handle_heart_caught });
 				});
 
 				start_timer_loop.cancel();
