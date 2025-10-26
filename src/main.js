@@ -27,5 +27,28 @@ k.setGravity(400);
 
 const GAME_PADDING = 64;
 
+k.loadSprite("steel", "/sprites/steel.png");
+
+// adding the side borders
+const total_bricks = Math.ceil(k.height() / 64);
+for (let i = 0; i < total_bricks; i++) {
+	k.add([
+		k.sprite("steel"),
+		k.pos(0, i * 64),
+		k.anchor("topleft"),
+		k.body({ isStatic: true }),
+		k.stay(),
+		k.z(10),
+	]);
+	k.add([
+		k.sprite("steel"),
+		k.pos(k.width(), i * 64),
+		k.anchor("topright"),
+		k.body({ isStatic: true }),
+		k.stay(),
+		k.z(10),
+	]);
+}
+
 registerLoadingScene({ k, padding: GAME_PADDING });
 k.go("loading");

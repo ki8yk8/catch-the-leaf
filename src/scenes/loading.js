@@ -6,7 +6,6 @@ import { registerInstructionsScene } from "./instructions";
 const sprites = [
 	["heart-light", "/sprites/heart-light.png"],
 	["heart-dark", "/sprites/heart-dark.png"],
-	["steel", "/sprites/steel.png"],
 	["grass", "/sprites/grass.png"],
 	["leaf", "/sprites/leaf.png"],
 	["butterfly", "/sprites/btfly.png"],
@@ -53,7 +52,7 @@ export function registerLoadingScene({ k, padding }) {
 			k.rect(k.width() - padding * 2, k.height()),
 			k.pos(k.width() / 2, k.height() / 2),
 			k.anchor("center"),
-			k.color("#ffffff"),
+			k.color("#86DB3C"),
 		]);
 
 		const loading_bar = loading_screen.add([
@@ -77,8 +76,15 @@ export function registerLoadingScene({ k, padding }) {
 			k.color("#000000"),
 			k.anchor("center"),
 			k.pos(0, 100),
+			k.animate({ relative: true }),
 		]);
 		hint_text.hidden = true;
+
+		// bouncy effect of hint text
+		hint_text.animate("scale", [k.vec2(1), k.vec2(1.05), k.vec2(1)], {
+			duration: 1,
+			easing: k.easings.easeInBounce,
+		});
 
 		const loading_text = loading_bar_inner.add([
 			k.text("Loading... 0%", {
@@ -128,27 +134,6 @@ export function registerLoadingScene({ k, padding }) {
 		});
 
 		function loadComplete() {
-			// adding the side borders
-			const total_bricks = Math.ceil(k.height() / 64);
-			for (let i = 0; i < total_bricks; i++) {
-				k.add([
-					k.sprite("steel"),
-					k.pos(0, i * 64),
-					k.anchor("topleft"),
-					k.body({ isStatic: true }),
-					k.stay(),
-					k.z(10),
-				]);
-				k.add([
-					k.sprite("steel"),
-					k.pos(k.width(), i * 64),
-					k.anchor("topright"),
-					k.body({ isStatic: true }),
-					k.stay(),
-					k.z(10),
-				]);
-			}
-
 			registerGameplayScene({ k, padding });
 			registerStartScene({ k, padding });
 			registerGameOverScene({ k, padding });
