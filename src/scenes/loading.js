@@ -41,6 +41,7 @@ const sounds = [
 	["break", "/sounds/break.mp3"],
 	["confetti", "/sounds/confetti.mp3"],
 	["whoosh", "/sounds/whoosh.mp3"],
+	["game-start", "/sounds/game-start.mp3"],
 ];
 
 export function registerLoadingScene({ k, padding }) {
@@ -65,7 +66,7 @@ export function registerLoadingScene({ k, padding }) {
 		const loading_bar_inner = loading_screen.add([
 			k.rect(0, 72 - 8 * 2),
 			k.color("#ffffff"),
-			k.pos(-loading_bar.width/2 +8, 0),
+			k.pos(-loading_bar.width / 2 + 8, 0),
 			k.anchor("left"),
 		]);
 
@@ -74,7 +75,7 @@ export function registerLoadingScene({ k, padding }) {
 				font: "atma-bold",
 				size: 32,
 			}),
-			k.pos(loading_bar.width/2, 0),
+			k.pos(loading_bar.width / 2, 0),
 			k.color("#ff0000"),
 			k.anchor("center"),
 		]);
@@ -104,6 +105,10 @@ export function registerLoadingScene({ k, padding }) {
 				(k.width() * 2) / 3 - 8 * 2
 			);
 			loading_bar_inner.use(k.rect(new_width, 72 - 8 * 2));
+
+			if (loaded === total) {
+				k.wait(1, loadComplete);
+			}
 		}
 
 		function loadComplete() {
@@ -128,10 +133,10 @@ export function registerLoadingScene({ k, padding }) {
 				]);
 			}
 
-			registerGameplayScene({ k, padding: GAME_PADDING });
-			registerStartScene({ k, padding: GAME_PADDING });
-			registerGameOverScene({ k, padding: GAME_PADDING });
-			registerInstructionsScene({ k, padding: GAME_PADDING });
+			registerGameplayScene({ k, padding });
+			registerStartScene({ k, padding });
+			registerGameOverScene({ k, padding });
+			registerInstructionsScene({ k, padding });
 
 			k.go("startgame");
 		}

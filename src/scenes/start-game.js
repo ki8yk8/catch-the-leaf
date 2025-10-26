@@ -3,9 +3,12 @@ const LEAF_GAP = 32;
 
 export function registerStartScene({ k, padding }) {
 	k.scene("startgame", () => {
+		let sound = true;
+		k.volume(sound ? 1 : 0);
+
+		k.play("game-start");
 		const bg_music = k.play("music", {
 			loop: true,
-			volume: 0.8,
 		});
 
 		const game_screen = k.add([
@@ -143,8 +146,6 @@ export function registerStartScene({ k, padding }) {
 			k.pos(0, start_btn.height / 2 + 4),
 		]);
 
-		let sound = true;
-		k.volume(sound ? 1 : 0);
 		const sound_btn = game_screen.add([
 			k.rect((game_screen.width * 2) / 3, 48 + 16 * 2, {
 				radius: 20,
