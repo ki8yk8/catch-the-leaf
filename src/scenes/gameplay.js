@@ -9,6 +9,7 @@ import { spawn_magnet } from "../objects/magnet";
 import { Scenery } from "../objects/scenery";
 
 const LEAF_INTERVAL = 1.7; // in seconds
+const MIN_LEAF_INTERVAL = 0.6;
 const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 7;
 const BOMB_SLOPE = 0.09;
@@ -133,7 +134,7 @@ export function registerGameplayScene({ k, padding }) {
 					i++;
 					if (i >= LEVEL_INCREASE_SCORE - 1) {
 						bonus_loop.cancel();
-						next_times.leaf = k.time() + LEAF_INTERVAL;  // start spawning the leaf
+						next_times.leaf = k.time() + LEAF_INTERVAL; // start spawning the leaf
 					}
 				});
 
@@ -175,7 +176,7 @@ export function registerGameplayScene({ k, padding }) {
 		};
 
 		function get_decrement(interval, slope, level) {
-			return interval * (1 - slope) ** level;
+			return Math.max(MIN_LEAF_INTERVAL, interval * (1 - slope) ** level);
 		}
 
 		// spawnning logic starts here

@@ -67,7 +67,7 @@ export function spawn_magnet({ k, basket, padding }) {
 				k.text(`Magnet Active`, {
 					size: 72,
 				}),
-				k.pos(k.width() / 2, k.height() / 3),
+				k.pos(k.width() / 2, k.height() / 3 + 72),
 				k.color(k.Color.fromHex("#fed702")),
 				k.anchor("center"),
 			]);
