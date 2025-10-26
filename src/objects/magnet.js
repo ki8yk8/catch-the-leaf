@@ -66,20 +66,34 @@ export function spawn_magnet({ k, basket, padding }) {
 			const magnet_progress_bar = k.add([
 				k.rect(k.width() / 3, 48),
 				k.pos(25 + padding, 75),
-				k.color("#fed702"),
+				k.color("#86bd3c"),
 				k.anchor("topleft"),
 				k.z(1),
 			]);
 
 			const width = k.width() / 3 - 8;
 
-			const size_bars = width / 7;
-			for (let i = 0; i < width / size_bars; i++) {
-				magnet_progress_bar.add([
-					k.rect(size_bars - 4, 40),
-					k.pos(4 + i * size_bars, 4),
-				]);
-			}
+			const size_bars = width / 25;
+			let n_bars = width / size_bars;
+
+			const bars_loop = k.loop(MAGNET_LASTS / n_bars, () => {
+				// destroying the old magnet bars
+				magnet_progress_bar.get("magnet-bar").forEach((bar) => {
+					k.destroy(bar);
+				});
+
+				for (let i = 0; i < n_bars; i++) {
+					magnet_progress_bar.add([
+						k.rect(size_bars - 2, 40),
+						k.pos(4 + i * size_bars, 4),
+						"magnet-bar",
+					]);
+				}
+				n_bars--;
+				if (n_bars === 0) {
+					bars_loop.cancel();
+				}
+			});
 
 			const magnet_text = k.add([
 				k.text(`Magnet`, {
@@ -90,10 +104,11 @@ export function spawn_magnet({ k, basket, padding }) {
 			]);
 
 			// remove text before stopping
-			k.wait(MAGNET_LASTS - 1.5, () => k.destroy(magnet_text));
+			k.wait(MAGNET_LASTS - 1, () => k.destroy(magnet_text));
 
 			k.wait(MAGNET_LASTS, () => {
 				basket.untag("basket--magnetic");
+				k.destroy(magnet_progress_bar);
 				magnet_sound.stop();
 			});
 		},
