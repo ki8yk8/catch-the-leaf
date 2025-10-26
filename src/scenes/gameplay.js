@@ -52,6 +52,7 @@ export function registerGameplayScene({ k, padding }) {
 			padding,
 			mode,
 		});
+		spawn_magnet({ k, basket, padding });
 
 		const score_text = k.add([
 			k.text(`Score: ${game.score}`, {

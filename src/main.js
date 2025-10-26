@@ -1,10 +1,12 @@
 import kaplay from "kaplay";
 import { registerLoadingScene } from "./scenes/loading";
 
+const user_screen_size = Math.floor(window.innerWidth / 64) * 64;
+
 const k = kaplay({
 	canvas: document.getElementById("game"),
 	background: "#fdfffc",
-	width: 768,
+	width: Math.min(user_screen_size, 768),
 	height: window.innerHeight,
 	scale: 1,
 	stretch: false,

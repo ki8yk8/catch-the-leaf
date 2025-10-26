@@ -63,13 +63,30 @@ export function spawn_magnet({ k, basket, padding }) {
 			const magnet_sound = k.play("whoosh", { loop: true });
 			basket.tag("basket--magnetic");
 
+			const magnet_progress_bar = k.add([
+				k.rect(k.width() / 3, 48),
+				k.pos(25 + padding, 75),
+				k.color("#fed702"),
+				k.anchor("topleft"),
+				k.z(1),
+			]);
+
+			const width = k.width() / 3 - 8;
+
+			const size_bars = width / 7;
+			for (let i = 0; i < width / size_bars; i++) {
+				magnet_progress_bar.add([
+					k.rect(size_bars - 4, 40),
+					k.pos(4 + i * size_bars, 4),
+				]);
+			}
+
 			const magnet_text = k.add([
-				k.text(`Magnet Active`, {
-					size: 72,
+				k.text(`Magnet`, {
+					size: 18,
 				}),
-				k.pos(k.width() / 2, k.height() / 3 + 72),
-				k.color(k.Color.fromHex("#fed702")),
-				k.anchor("center"),
+				k.pos(25 + padding, 75 + 48 + 4),
+				k.color("#fed702"),
 			]);
 
 			// remove text before stopping
