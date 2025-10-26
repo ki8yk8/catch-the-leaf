@@ -167,23 +167,12 @@ export function registerStartScene({ k, padding }) {
 
 		const btns = [start_btn, instructions_btn, sound_btn];
 		let active_btn = 0;
-		k.onKeyPress("down", () => {
-			if (active_btn >= btns.length - 1) return;
+		k.onKeyPress("down", () => handleMenuItemToggle(1));
+		k.onKeyPress("up", () => handleMenuItemToggle(-1));
 
-			// remove outline from previous
-			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
-			btns[active_btn].use(k.z(1));
-			k.play("click");
-			k.tween(1.1, 1, 0.15, (s) => btns[active_btn].use(k.scale(s)));
-			k.wait(0.15, () => {
-				active_btn++;
-				btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
-				k.tween(1, 1.1, 0.25, (s) => btns[active_btn].use(k.scale(s)));
-				btns[active_btn].use(k.z(10));
-			});
-		});
-		k.onKeyPress("up", () => {
-			if (active_btn === 0) return;
+		function handleMenuItemToggle(increment = 1) {
+			if (active_btn === 0 && increment === -1) return;
+			if (active_btn === btns.length - 1 && increment === 1) return;
 
 			// remove outline from previous
 			btns[active_btn].use(k.outline(0, k.Color.fromHex("#86DB3C")));
@@ -191,12 +180,12 @@ export function registerStartScene({ k, padding }) {
 			k.tween(1.1, 1, 0.15, (s) => btns[active_btn].use(k.scale(s)));
 			k.play("click");
 			k.wait(0.15, () => {
-				active_btn--;
+				active_btn = active_btn + increment;
 				btns[active_btn].use(k.outline(8, k.Color.fromHex("#FED701")));
 				k.tween(1, 1.1, 0.25, (s) => btns[active_btn].use(k.scale(s)));
 				btns[active_btn].use(k.z(10));
 			});
-		});
+		}
 
 		// what happens when enter is clicked on top of button
 		k.onKeyPress("enter", () => {
