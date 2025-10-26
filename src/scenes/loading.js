@@ -70,6 +70,16 @@ export function registerLoadingScene({ k, padding }) {
 			k.anchor("left"),
 		]);
 
+		const hint_text = loading_screen.add([
+			k.text("Press space to start...", {
+				size: 48,
+			}),
+			k.color("#000000"),
+			k.anchor("center"),
+			k.pos(0, 100),
+		]);
+		hint_text.hidden = true;
+
 		const loading_text = loading_bar_inner.add([
 			k.text("Loading... 0%", {
 				font: "atma-bold",
@@ -107,9 +117,15 @@ export function registerLoadingScene({ k, padding }) {
 			loading_bar_inner.use(k.rect(new_width, 72 - 8 * 2));
 
 			if (loaded === total) {
-				k.wait(1, loadComplete);
+				hint_text.hidden = false;
 			}
 		}
+
+		k.onKeyPress("space", () => {
+			if (loaded === total) {
+				k.wait(1, loadComplete);
+			}
+		});
 
 		function loadComplete() {
 			// adding the side borders
