@@ -4,7 +4,7 @@ const LEAF_GAP = 32;
 export function registerStartScene({ k, padding }) {
 	k.scene("startgame", () => {
 		let sound = true;
-		k.volume(sound ? 1 : 0);
+		k.setVolume(sound ? 1 : 0);
 
 		k.play("game-start");
 		const bg_music = k.play("music", {
@@ -207,7 +207,7 @@ export function registerStartScene({ k, padding }) {
 				k.go("instructions");
 			} else if (active_btn === 2) {
 				sound = !sound;
-				k.volume(sound ? 1 : 0);
+				k.setVolume(sound ? 1 : 0);
 				sound_btn_text.use(
 					k.text(`Sound: ${sound ? "On" : "Off"}`, {
 						size: 48,
