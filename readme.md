@@ -12,7 +12,7 @@ And here are some helpful features for you;
 ## Demo
 Play the game live at: [https://catch-the-leaf.vercel.app/](https://catch-the-leaf.vercel.app/)
 
-Demo video will be uploaded from GitHub
+https://github.com/user-attachments/assets/f4e25474-ca15-4ffa-8056-8b21b2a56ffa
 
 ## Tech Used
 1. Kaplay JS
