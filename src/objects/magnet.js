@@ -64,7 +64,10 @@ export function spawn_magnet({ k, basket, padding }) {
 			basket.tag("basket--magnetic");
 
 			const magnet_progress_bar = k.add([
-				k.rect(k.width() / 3, 48),
+				k.rect(k.width() / 3, 48, {
+					fill: false,
+				}),
+				k.outline(4),
 				k.pos(25 + padding, 75),
 				k.color("#86bd3c"),
 				k.anchor("topleft"),
@@ -86,6 +89,7 @@ export function spawn_magnet({ k, basket, padding }) {
 					magnet_progress_bar.add([
 						k.rect(size_bars - 2, 40),
 						k.pos(4 + i * size_bars, 4),
+						k.color("#86bd3c"),
 						"magnet-bar",
 					]);
 				}

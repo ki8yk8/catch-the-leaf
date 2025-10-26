@@ -10,15 +10,15 @@ export function registerInstructionsScene({ k, padding }) {
 		// instructions starts here
 		const instruction_text = game_screen.add([
 			k.text(
-				"Collect all the leafs in the basket to gain score. Higher the score, higher the level, and so the difficulty. \n\nBeaware of the bombs and you get rewarded with stream of easy to collect leafs every now and then.",
+				"Collect all the leafs in the basket to gain score. Higher the score, higher the level, and so the difficulty. \n\nBeaware of the bombs and you get rewarded with stream of easy to collect leafs every now and then.\n\nStay 30 seconds and get help from magnets.",
 				{
 					size: 28,
-					width: (game_screen.width * 2) / 3,
+					width: (game_screen.width * 2.5) / 3,
 					lineSpacing: 18,
 					align: "center",
 				}
 			),
-			k.pos(game_screen.width / 2, 150),
+			k.pos(game_screen.width / 2, 100),
 			k.anchor("top"),
 			k.color("#8A2AE0"),
 		]);
@@ -28,7 +28,7 @@ export function registerInstructionsScene({ k, padding }) {
 				font: "atma-bold",
 			}),
 			k.anchor("bot"),
-			k.pos(game_screen.width / 2, game_screen.height - 100),
+			k.pos(game_screen.width / 2, game_screen.height - 50),
 			k.animate({
 				relative: true,
 			}),
