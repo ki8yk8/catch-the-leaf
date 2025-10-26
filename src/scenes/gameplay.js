@@ -119,7 +119,7 @@ export function registerGameplayScene({ k, padding }) {
 			// if this is BONUS level then, the number of leafs to increment the user to next level should appear linearly
 			if (game.level % BONUS_LEVEL === 0) {
 				const random_x = k.rand(padding, k.width() - 38 - padding);
-				next_times.leaf = k.time() + 0.5 * LEVEL_INCREASE_SCORE + 1;
+				next_times.leaf = k.time() + 100; // never spawn a leaf
 
 				let i = 0;
 				const bonus_loop = k.loop(0.5, () => {
@@ -133,6 +133,7 @@ export function registerGameplayScene({ k, padding }) {
 					i++;
 					if (i >= LEVEL_INCREASE_SCORE - 1) {
 						bonus_loop.cancel();
+						next_times.leaf = k.time() + LEAF_INTERVAL;  // start spawning the leaf
 					}
 				});
 
