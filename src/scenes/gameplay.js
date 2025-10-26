@@ -12,8 +12,8 @@ const LEAF_INTERVAL = 1.7; // in seconds
 const LEAF_INTERVAL_SLOPE = 0.1;
 const BOMB_INTERVAL = 7;
 const BOMB_SLOPE = 0.09;
-const HEART_INTERVAL = 13;
-const MAGNET_INTERVAL = 29;
+const HEART_INTERVAL = 17;
+const MAGNET_INTERVAL = 33;
 
 const GROUND_HEIGHT = 64;
 const MAX_GROUND_LEAFS = 4;
@@ -173,6 +173,10 @@ export function registerGameplayScene({ k, padding }) {
 			magnet: MAGNET_INTERVAL + 3 + k.time(),
 		};
 
+		function get_decrement(interval, slope, level) {
+			return interval * (1 - slope) ** level;
+		}
+
 		// spawnning logic starts here
 		k.onUpdate(() => {
 			const now = k.time();
@@ -185,14 +189,16 @@ export function registerGameplayScene({ k, padding }) {
 					padding,
 				});
 				next_times.leaf =
-					now + LEAF_INTERVAL * (1 - LEAF_INTERVAL_SLOPE) ** game.level;
+					now + get_decrement(LEAF_INTERVAL, LEAF_INTERVAL_SLOPE, game.level);
 
 				// if the next turn is heart then, check if there is a gap of at least 1 second
 				// if yes, do nothing
 				// else, increase the gap and increase the leaf interval too.
 				if (next_times.heart - now < 1) {
 					next_times.heart = now + 1;
-					next_times.leaf = next_times.leaf + LEAF_INTERVAL;
+					next_times.leaf =
+						next_times.leaf +
+						get_decrement(LEAF_INTERVAL, LEAF_INTERVAL_SLOPE, game.level);
 				}
 			}
 
@@ -200,20 +206,23 @@ export function registerGameplayScene({ k, padding }) {
 				// spawn the bomb and increase bomb timer plus increase next leaf time
 				Bomb({ k, padding, onHit: handle_bomb_hit, mode });
 				next_times.bomb = now + BOMB_INTERVAL * (1 - BOMB_SLOPE) ** game.level;
-				next_times.leaf = now + LEAF_INTERVAL;
+				// this is not required because it makes game easier to play
+				// next_times.leaf = now + LEAF_INTERVAL;
 			}
 
 			if (now >= next_times.heart) {
 				Life({ k, padding, onCatch: handle_heart_caught });
 				next_times.heart = now + HEART_INTERVAL;
-				next_times.leaf = now + LEAF_INTERVAL;
+				next_times.leaf =
+					now + get_decrement(LEAF_INTERVAL, LEAF_INTERVAL_SLOPE, game.level);
 			}
 
 			// if its time and user has crossed the first level then start spawning the magnets
 			if (now >= next_times.magnet) {
 				spawn_magnet({ k, basket, padding });
 				next_times.magnet = now + MAGNET_INTERVAL;
-				next_times.leaf = now + LEAF_INTERVAL;
+				next_times.leaf =
+					now + get_decrement(LEAF_INTERVAL, LEAF_INTERVAL_SLOPE, game.level);
 			}
 		});
 	});
