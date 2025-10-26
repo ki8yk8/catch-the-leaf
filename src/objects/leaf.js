@@ -26,6 +26,7 @@ export function spawn_leaf({
 		leaf_component(),
 		"leaf",
 		"leaf--falling",
+		k.offscreen({ destroy: true }),
 	]);
 
 	const ground_emitter = k.add([
@@ -67,6 +68,7 @@ export function spawn_leaf({
 	}
 
 	leaf.onCollide("ground", () => {
+		if (!leaf.exists() || leaf.is("leaf--on-ground")) return;
 		fireEmitter(ground_emitter);
 		k.play("drop");
 
@@ -77,22 +79,22 @@ export function spawn_leaf({
 		leaf.vel.x = 0;
 
 		k.wait(DISAPPEAR_ON_GROUND, () => {
-			k.destroy(leaf);
+			leaf.exists() && k.destroy(leaf);
 		});
 	});
 
 	leaf.onCollide("leaf", () => {
-		if (!leaf.is("leaf--on-ground")) {
+		if (!leaf.is("leaf--on-ground") && leaf.exists()) {
 			onDrop?.();
 			k.play("drop");
 		}
 
-		k.destroy(leaf);
+		leaf.exists() && k.destroy(leaf);
 	});
 
 	// leaf should come with slight rotation
 	leaf.onUpdate(() => {
-		if (!leaf.is("leaf--on-ground")) {
+		if (!leaf.is("leaf--on-ground") && leaf.exists()) {
 			leaf.move(Math.sin(k.time() * 3) * 10 * k.dt(), 0);
 			leaf.angle = Math.sin(k.time() * 3) * 10;
 		}
@@ -101,7 +103,7 @@ export function spawn_leaf({
 	leaf.onCollide("eat-area", () => {
 		k.play("catch");
 		fireEmitter(basket_emitter, 50);
-		k.destroy(leaf);
+		leaf.exists() && k.destroy(leaf);
 		onCatch?.();
 	});
 }
